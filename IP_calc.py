@@ -1,10 +1,11 @@
 import ipaddress
+from termcolor import colored, cprint
 while True:
     try:
         StN = int(input("Введите стартовый номер: "))
 
         if StN not in range(0, 256):
-            print("ОШИБКА: Стартовый номер должен быть в пределах от 0 до 255")
+            print(colored("ОШИБКА: Стартовый номер должен быть в пределах от 0 до 255", 'red'))
             continue
 
         else:
