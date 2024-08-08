@@ -1,0 +1,1072 @@
+{
+  "cars": [
+    {
+      "name": "75369_K",
+      "button": "10",
+      "layouts": [
+        {
+          "cams": [
+            {
+              "comment": "K",
+              "url": "rtsp://admin:ttsvideo6789@10.8.161.2:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1
+            },
+            {
+              "comment": "P",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.145:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2
+            },
+            {
+              "comment": "Ky",
+              "url": "rtsp://admin:ttsvideo6789@10.8.162.6:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 3
+            },
+            {
+              "comment": "AC",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.86:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "75369",
+      "button": "31",
+      "layouts": [
+        {
+          "cams": [
+            {
+              "comment": "75369 Cam1",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.161:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1
+            },
+            {
+              "comment": "75369 Cam2",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.99:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2
+            },
+            {
+              "comment": "75369 Cam3",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.149:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 3
+            },
+            {
+              "comment": "75369 Cam4",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.101:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 4
+            }
+          ]
+        },
+        {
+          "cams": [
+            {
+              "comment": "75369 Bes1",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.175:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1
+            },
+            {
+              "comment": "75369 Bes2",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.201:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2
+            },
+            {
+              "comment": "75369 Bes3",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.103:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 3
+            },
+            {
+              "comment": "75369 Bes4",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.97:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 4
+            }
+          ]
+        }
+      ],
+      "sidepanel": [
+        [
+          {
+            "comment": "75369 Bes1",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.175:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "75369 Cam1",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.161:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "75369 Bes1",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.175:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "75369 Cam1",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.161:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "75369 Bes2",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.201:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "75369 Cam2",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.99:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "75369 Bes3",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.103:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "75369 Cam3",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.149:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "75369 Bes4",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.97:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "75369 Cam4",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.101:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ]
+      ]
+    },
+    {
+      "name": "77369",
+      "button": "32",
+      "layouts": [
+        {
+          "cams": [
+            {
+              "comment": "77369 Cam1",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.54:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 4
+            },
+            {
+              "comment": "77369 Cam2",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.89:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 3
+            },
+            {
+              "comment": "77369 Cam3",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.128:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2
+            },
+            {
+              "comment": "77369 Cam4",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.94:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1
+            }
+          ]
+        },
+        {
+          "cams": [
+            {
+              "comment": "77369 Bes1",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.137:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1
+            },
+            {
+              "comment": "77369 Bes2",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.108:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2
+            },
+            {
+              "comment": "77369 Bes3",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.144:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 3
+            },
+            {
+              "comment": "77369 Bes4",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.104:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 4
+            }
+          ]
+        }
+      ],
+      "sidepanel": [
+        [
+          {
+            "comment": "77369 Bes2",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.108:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "77369 Cam2",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.89:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "77369 Bes1",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.137:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "77369 Cam1",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.54:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "77369 Bes4",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.104:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "77369 Cam4",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.94:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "77369 Bes3",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.144:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "77369 Cam3",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.128:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ]
+      ]
+    },
+    {
+      "name": "76697",
+      "button": "33",
+      "layouts": [
+        {
+          "cams": [
+            {
+              "comment": "76697 Cam1",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.155:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1
+            },
+            {
+              "comment": "76697 Cam2",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.91:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2
+            },
+            {
+              "comment": "76697 Cam3",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.176:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 3
+            },
+            {
+              "comment": "76697 Cam4",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.135:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 4
+            }
+          ]
+        },
+        {
+          "cams": [
+            {
+              "comment": "76697 Bes1",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.139:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1
+            },
+            {
+              "comment": "76697 Bes2",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.158:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2
+            },
+            {
+              "comment": "76697 Bes3",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.146:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 3
+            },
+            {
+              "comment": "76697 Bes4",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.92:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 4
+            }
+          ]
+        }
+      ],
+      "sidepanel": [
+        [
+          {
+            "comment": "76697 Bes2",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.158:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "76697 Cam2",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.91:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "76697 Bes1",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.139:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "76697 Cam1",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.155:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "76697 Bes4",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.92:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "76697 Cam4",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.135:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "76697 Bes3",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.146:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "76697 Cam3",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.176:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ]
+      ]
+    },
+    {
+      "name": "76698",
+      "button": "34",
+      "layouts": [
+        {
+          "cams": [
+            {
+              "comment": "76698 Cam1",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.204:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 4
+            },
+            {
+              "comment": "76698 Cam2",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.202:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 3
+            },
+            {
+              "comment": "76698 Cam3",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.71:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2
+            },
+            {
+              "comment": "76698 Cam4",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.110:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1
+            }
+          ]
+        },
+        {
+          "cams": [
+            {
+              "comment": "76698 Bes1",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.52:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1
+            },
+            {
+              "comment": "76698 Bes2",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.53:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2
+            },
+            {
+              "comment": "76698 Bes3",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.159:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 3
+            },
+            {
+              "comment": "76698 Bes4",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.49:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 4
+            }
+          ]
+        }
+      ],
+      "sidepanel": [
+        [
+          {
+            "comment": "76698 Bes2",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.53:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "76698 Cam2",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.202:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "76698 Bes1",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.52:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "76698 Cam1",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.204:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "76698 Bes4",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.49:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "76698 Cam4",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.110:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "76698 Bes3",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.159:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "76698 Cam3",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.71:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ]
+      ]
+    },
+    {
+      "name": "76699",
+      "button": "35",
+      "layouts": [
+        {
+          "cams": [
+            {
+              "comment": "76699 Cam1",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.58:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1
+            },
+            {
+              "comment": "76699 Cam2",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.68:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2
+            },
+            {
+              "comment": "76699 Cam3",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.56:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 3
+            },
+            {
+              "comment": "76699 Cam4",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.57:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 4
+            }
+          ]
+        },
+        {
+          "cams": [
+            {
+              "comment": "76699 Bes1",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.141:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1
+            },
+            {
+              "comment": "76699 Bes2",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.153:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2
+            },
+            {
+              "comment": "76699 Bes3",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.81:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 3
+            },
+            {
+              "comment": "76699 Bes4",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.140:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 4
+            }
+          ]
+        }
+      ],
+      "sidepanel": [
+        [
+          {
+            "comment": "76699 Bes2",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.153:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "76699 Cam2",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.68:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "76699 Bes1",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.141:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "76699 Cam1",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.58:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "76699 Bes4",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.140:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "76699 Cam4",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.57:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "76699 Bes3",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.81:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "76699 Cam3",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.56:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ]
+      ]
+    },
+    {
+      "name": "76700",
+      "button": "36",
+      "layouts": [
+        {
+          "cams": [
+            {
+              "comment": "76700 Cam1",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.136:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 4
+            },
+            {
+              "comment": "76700 Cam2",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.186:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 3
+            },
+            {
+              "comment": "76700 Cam3",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.150:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2
+            },
+            {
+              "comment": "76700 Cam4",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.124:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1
+            }
+          ]
+        },
+        {
+          "cams": [
+            {
+              "comment": "76700 Bes1",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.95:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1
+            },
+            {
+              "comment": "76700 Bes2",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.122:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2
+            },
+            {
+              "comment": "76700 Bes3",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.163:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 3
+            },
+            {
+              "comment": "76700 Bes4",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.156:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 4
+            }
+          ]
+        }
+      ],
+      "sidepanel": [
+        [
+          {
+            "comment": "76700 Bes2",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.122:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "76700 Cam2",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.186:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "76700 Bes1",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.95:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "76700 Cam1",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.136:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "76700 Bes4",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.156:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "76700 Cam4",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.124:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "76700 Bes3",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.163:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "76700 Cam3",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.150:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ]
+      ]
+    },
+    {
+      "name": "77370",
+      "button": "37",
+      "layouts": [
+        {
+          "cams": [
+            {
+              "comment": "77370 Cam1",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.90:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1
+            },
+            {
+              "comment": "77370 Cam2",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.147:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2
+            },
+            {
+              "comment": "77370 Cam3",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.100:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 3
+            },
+            {
+              "comment": "77370 Cam4",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.76:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 4
+            }
+          ]
+        },
+        {
+          "cams": [
+            {
+              "comment": "77370 Bes1",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.152:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1
+            },
+            {
+              "comment": "77370 Bes2",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.69:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2
+            },
+            {
+              "comment": "77370 Bes3",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.178:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 3
+            },
+            {
+              "comment": "77370 Bes4",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.148:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 4
+            }
+          ]
+        }
+      ],
+      "sidepanel": [
+        [
+          {
+            "comment": "77370 Bes2",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.69:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "77370 Cam2",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.147:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "77370 Bes1",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.152:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "77370 Cam1",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.90:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "77370 Bes4",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.148:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "77370 Cam4",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.76:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "77370 Bes3",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.178:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "77370 Cam3",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.100:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ]
+      ]
+    },
+    {
+      "name": "75370",
+      "button": "38",
+      "layouts": [
+        {
+          "cams": [
+            {
+              "comment": "75370 Cam1",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.74:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 4
+            },
+            {
+              "comment": "75370 Cam2",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.75:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 3
+            },
+            {
+              "comment": "75370 Cam3",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.106:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2
+            },
+            {
+              "comment": "75370 Cam4",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.51:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1
+            }
+          ]
+        },
+        {
+          "cams": [
+            {
+              "comment": "75370 Bes1",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.196:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1
+            },
+            {
+              "comment": "75370 Bes2",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.143:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2
+            },
+            {
+              "comment": "75370 Bes3",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.151:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 3
+            },
+            {
+              "comment": "75370 Bes4",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.190:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 4
+            }
+          ]
+        }
+      ],
+      "sidepanel": [
+        [
+          {
+            "comment": "75370 Bes2",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.143:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "75370 Cam2",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.75:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "75370 Bes1",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.196:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "75370 Cam1",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.74:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "75370 Bes4",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.190:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "75370 Cam4",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.51:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "75370 Bes3",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.151:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "75370 Cam3",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.106:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ],
+        [
+          {
+            "comment": "75370 Bes4",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.190:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 1
+          },
+          {
+            "comment": "75370 Cam4",
+            "url": "rtsp://admin:ttsvideo6789@10.8.180.51:554/cam/realmonitor?channel=1&subtype=1",
+            "win": 2
+          }
+        ]
+      ]
+    },
+    {
+      "name": "75370_K",
+      "button": "11",
+      "layouts": [
+        {
+          "cams": [
+            {
+              "comment": "K",
+              "url": "rtsp://admin:ttsvideo6789@10.8.161.1:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1
+            },
+            {
+              "comment": "P",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.123:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2
+            },
+            {
+              "comment": "Ky",
+              "url": "rtsp://admin:ttsvideo6789@10.8.162.5:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 3
+            },
+            {
+              "comment": "AC",
+              "url": "rtsp://admin:ttsvideo6789@10.8.180.85:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 4
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "mirrors": [
+    {
+      "icon": "1",
+      "button": "41",
+      "layouts": [
+        {
+          "cams": [
+            {
+              "comment": "75369 L",
+              "url": "rtsp://admin:ttsvideo6789@10.8.160.12:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1,
+              "side_view": 1
+            },
+            {
+              "comment": "75370 R",
+              "url": "rtsp://admin:ttsvideo6789@10.8.160.4:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2,
+	      "side_view": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "icon": "2",
+      "button": "42",
+      "layouts": [
+        {
+          "cams": [
+            {
+              "comment": "75370 L",
+              "url": "rtsp://admin:ttsvideo6789@10.8.160.1:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1,
+              "side_view": 1
+            },
+            {
+              "comment": "75369 R",
+              "url": "rtsp://admin:ttsvideo6789@10.8.160.8:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2,
+              "side_view": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "icon": "3",
+      "button": "43",
+      "layouts": [
+        {
+          "cams": [
+            {
+              "comment": "75370 R",
+              "url": "rtsp://admin:ttsvideo6789@10.8.160.4:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1,
+              "side_view": 1
+            },
+            {
+              "comment": "75370 L",
+              "url": "rtsp://admin:ttsvideo6789@10.8.160.1:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2,
+              "side_view": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "icon": "4",
+      "button": "44",
+      "layouts": [
+        {
+          "cams": [
+            {
+              "comment": "75369 L",
+              "url": "rtsp://admin:ttsvideo6789@10.8.160.12:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1,
+              "side_view": 1
+            },
+            {
+              "comment": "75369 R",
+              "url": "rtsp://admin:ttsvideo6789@10.8.160.8:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2,
+              "side_view": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "icon": "5",
+      "button": "45",
+      "layouts": [
+        {
+          "cams": [
+            {
+              "comment": "75369 L",
+              "url": "rtsp://admin:ttsvideo6789@10.8.160.12:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1,
+              "side_view": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "icon": "6",
+      "button": "46",
+      "layouts": [
+        {
+          "cams": [
+            {
+              "comment": "75369 R",
+              "url": "rtsp://admin:ttsvideo6789@10.8.160.8:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1,
+              "side_view": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "icon": "7",
+      "button": "47",
+      "layouts": [
+        {
+          "cams": [
+            {
+              "comment": "75369 L",
+              "url": "rtsp://admin:ttsvideo6789@10.8.160.12:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 1
+            },
+            {
+              "comment": "75369 R",
+              "url": "rtsp://admin:ttsvideo6789@10.8.160.8:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 2
+            },
+            {
+              "comment": "75370 R",
+              "url": "rtsp://admin:ttsvideo6789@10.8.160.4:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 3
+            },
+            {
+              "comment": "75370 L",
+              "url": "rtsp://admin:ttsvideo6789@10.8.160.1:554/cam/realmonitor?channel=1&subtype=1",
+              "win": 4
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
