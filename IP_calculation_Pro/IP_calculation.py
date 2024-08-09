@@ -30,8 +30,20 @@ print(df)
 print('________________________')
 
 #df_2 = df[df['switch_last_serial_number'] == ''] yt hf,jnftn
+#df_2 = pd.isna(df['switch_last_serial_number'])
+#df_3 = df['switch_last_serial_number']
+#print(df_2)
 
-df_2 = pd.isna(df['switch_last_serial_number'])
-df_3 = df['switch_last_serial_number']
+j = 0
+while pd.notnull(df.at[j, 'switch_last_serial_number']):
+    a = df.at[j, 'switch_last_serial_number']
+    print(a)
+    j += 1
+else: print(f"Индекс последней ненулевой строки: {j - 1}")
 
-print(df_2)
+# i = 0
+# while pd.notnull(df.at[i, 'camera_control_unit_last_IP']):
+#     i += 1
+# else: print(f"Индекс последней ненулевой строки: {i-1}")
+
+#else: print(f'Hi! {i}')
