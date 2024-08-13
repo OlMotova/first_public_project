@@ -1,5 +1,7 @@
 import pandas as pd
 
+#loading start
+
 url = 'https://docs.google.com/spreadsheets/d/1mPWR7CGOOu268woDhUocSk2owEBvMrNEzFNC2t6ArCU/edit?usp=sharing'
 
 import re
@@ -22,28 +24,36 @@ new_url = convert_google_sheet_url(url)
 print(new_url)
 # https://docs.google.com/spreadsheets/d/1mSEJtzy5L0nuIMRlY9rYdC5s899Ptu2gdMJcIalr5pg/export?gid=1606352415&format=csv
 
-
 df = pd.read_csv(new_url)
 
-print(df)
+#loading end
+
+print(df.head())
 
 print('________________________')
 
-#df_2 = df[df['switch_last_serial_number'] == ''] yt hf,jnftn
-#df_2 = pd.isna(df['switch_last_serial_number'])
-#df_3 = df['switch_last_serial_number']
-#print(df_2)
+print(df.dtypes)
 
-j = 0
-while pd.notnull(df.at[j, 'switch_last_serial_number']):
-    a = df.at[j, 'switch_last_serial_number']
-    print(a)
-    j += 1
-else: print(f"Индекс последней ненулевой строки: {j - 1}")
+#data type convert
+from datetime import datetime
+import ipaddress
 
-# i = 0
-# while pd.notnull(df.at[i, 'camera_control_unit_last_IP']):
-#     i += 1
-# else: print(f"Индекс последней ненулевой строки: {i-1}")
+df['order_date'] = pd.to_datetime(df['order_date'], format='%d.%m.%Y')
+#df['last_IP'] = df['last_IP'].ip.apply(lambda x: ipaddress.ip_address(x))
 
-#else: print(f'Hi! {i}')
+
+print('________________________')
+print(df.dtypes)
+
+print(df.describe())
+print('________________________')
+
+print(df['equipment_name'].unique())
+equipment_name = input("Введите имя устройства: ")
+
+df_2 = df[df['equipment_name'] == equipment_name]
+print(df_2)
+
+print('________________________')
+max_IP = df_2['last_IP'].max()
+print(f'Последний используемый IP: {max_IP}')
