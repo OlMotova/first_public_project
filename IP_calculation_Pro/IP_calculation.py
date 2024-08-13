@@ -57,3 +57,14 @@ print(df_2)
 print('________________________')
 max_IP = df_2['last_IP'].max()
 print(f'Последний используемый IP: {max_IP}')
+
+IP_max_IP = ipaddress.ip_address(max_IP)
+new_max_IP = IP_max_IP + 256
+print(f'Новый последний IP: {new_max_IP}')
+
+
+
+df.loc[ len(df.index )] = [equipment_name, 'здесь будет тип', 'здесь будет серийник', new_max_IP, 'здесь будет дата']
+print(df.tail())
+
+df.to_excel("output.xlsx")
