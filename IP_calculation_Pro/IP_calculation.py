@@ -28,11 +28,11 @@ df = pd.read_csv(new_url)
 
 #loading end
 
-print(df.head())
+#print(df.head())
 
-print('________________________')
+#print('________________________')
 
-print(df.dtypes)
+#print(df.dtypes)
 
 #data type convert
 from datetime import datetime
@@ -42,11 +42,11 @@ df['order_date'] = pd.to_datetime(df['order_date'], format='%d.%m.%Y')
 #df['last_IP'] = df['last_IP'].ip.apply(lambda x: ipaddress.ip_address(x))
 
 
-print('________________________')
-print(df.dtypes)
+#print('________________________')
+#print(df.dtypes)
 
-print(df.describe())
-print('________________________')
+#print(df.describe())
+#print('________________________')
 
 print(df['equipment_name'].unique())
 equipment_name = input("Введите имя устройства: ")
