@@ -1,18 +1,12 @@
 import pandas as pd
 import ipaddress
-import re
 from datetime import datetime
 
 #loading start
-
 df = pd.read_excel('Main_file_test.xlsx')
 equipment_df = pd.read_excel('equipment_database.xlsx')
-
 #loading end
 
-#data type convert
-#df['order_date'] = pd.to_datetime(df['order_date'], format='%d.%m.%Y')
-#df['last_IP'] = df['last_IP'].ip.apply(lambda x: ipaddress.ip_address(x))
 
 #print('________________________')
 #print(df.dtypes)
@@ -35,10 +29,7 @@ equipment_df_3 = equipment_df_3.reset_index(drop = True)
 stickers_count = 256
 
 if df_3.empty: #работа с новым элементом
-    print('DataFrame is empty!')
-#    last_ZvN = equipment_df_3['last_serial_number'][0]
-#    last_IP_ = equipment_df_3['last_IP'][0]
-#    last_IP = ipaddress.ip_address(last_IP_)
+
     new_first_IP_ = equipment_df_3['first_IP'][0]
     new_first_IP = ipaddress.ip_address(new_first_IP_)
     new_first_ZvN = equipment_df_3['first_serial_number'][0]
@@ -80,6 +71,11 @@ df = df._append(df_add, ignore_index= True)
 print(df.tail())
 
 
+
+
+
+
+#вывод данных
 df.to_excel("Main_file_test.xlsx", index=False)
 print(f'''
 ________________________________________
@@ -91,5 +87,18 @@ ________________________________________
 {new_first_IP}, {new_first_IP+1}, ..., {new_last_IP}
 
 ''')
+from contextlib import redirect_stdout
 
+# Вывод 'print' отправляется в 'output.txt'
+with open('output.txt', 'w') as f, redirect_stdout(f):
+    print(f'''
+________________________________________
+Информация о новом заказе внесена в базу.
+
+Требуется заказать этикетки для {equipment_name} {equipment_type} 
+с заводскими номерами {new_first_ZvN} - {new_last_ZvN} и IP
+
+{new_first_IP}, {new_first_IP + 1}, ..., {new_last_IP}.
+
+''')
 
