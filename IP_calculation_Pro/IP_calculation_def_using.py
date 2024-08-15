@@ -3,6 +3,8 @@ import pandas as pd
 import ipaddress
 from datetime import datetime
 import sys
+import numpy as np
+from contextlib import redirect_stdout
 from ipaddress import IPv4Network
 
 #loading start
@@ -113,13 +115,13 @@ def IP_range_check(df_base, index):
 ''')
 
     if min_ZvN <= new_first_ZvN and new_last_ZvN <= max_ZvN:
-        print("заводской номер в допустимом диапазоне")
+        print("Проверка пройдена: заводской номер в допустимом диапазоне")
     else:
         print("ОШИБКА: заводской номер вне диапазона")
         sys.exit()
 
     if min_IP <= new_first_IP and new_last_IP <= max_IP:
-        print("IP в допустимом диапазоне")
+        print("Проверка пройдена: IP в допустимом диапазоне")
     else:
         print("ОШИБКА: IP вне диапазона")
         sys.exit()
@@ -129,49 +131,62 @@ def IP_range_check(df_base, index):
 equipment_index_int = int(equipment_index[0])
 IP_range_check(equipment_df, equipment_index_int)
 
-
-#def IP_list_exploding ():
-str_first_IP = str(new_first_IP)
-first_IP_parts = str_first_IP.split('.')
-
-str_last_IP = str(new_last_IP)
-last_IP_parts = str_last_IP.split('.')
-
-for i in range(0,3):
-    if first_IP_parts[i] == last_IP_parts[i]:
-        print("IP в одном диапазоне")
-    else: print("надо поработать над разделением диапазонов")
-
-#IP_list_exploding()
-
-
-
-
 df = df._append(df_add, ignore_index= True)
-print(df.tail())
+#print(df.tail())
+
+df.to_excel("Main_file_test.xlsx", index=False) #запись в файл
 
 
+def IP_converter(IP):
+    str_IP = str(IP)
+    line_IP = str_IP.split('.')
+    return line_IP
 
+def middle_IP_creating(a, b, c):
+    middle_IP= ipaddress.ip_address(str(a) + '.' + str(b) + '.' + str(c) + '.' + '255')
+    return middle_IP
 
+#def createList(r1, r2):
+#    return list(range(r1, r2 + 1))
 
+def create_IP_list(r1, r2):
+    # Testing if range r1 and r2
+    # are equal
+    if (r1 == r2):
+        return r1
 
+    else:
+        # Create empty list
+        res = []
 
-df.to_excel("Main_file_test.xlsx", index=False)
-print(f'''
+        # loop to append successors to
+        # list until r2 is reached.
+        while (r1 < (r2 + 1)):
+            res.append(r1)
+            r1 += 1
+        return res
+
+first_IP_parts = IP_converter(new_first_IP)
+last_IP_parts = IP_converter(new_last_IP)
+
+arrays_equal = np.array_equal(first_IP_parts[0:3], last_IP_parts[0:3])
+
+if arrays_equal == True:
+    print("Проверка пройдена: IP в одном диапазоне")
+    print(f'''
 ________________________________________
 Информация о новом заказе внесена в базу.
 
 Требуется заказать этикетки для {equipment_name} {equipment_type} 
 с заводскими номерами {new_first_ZvN} - {new_last_ZvN} и IP
 
-{new_first_IP}, {new_first_IP+1}, ..., {new_last_IP}
+{new_first_IP}, {new_first_IP + 1}, ..., {new_last_IP}
 
 ''')
-from contextlib import redirect_stdout
 
-# Вывод 'print' отправляется в 'output.txt'
-with open('output.txt', 'w') as f, redirect_stdout(f):
-    print(f'''
+    # Вывод 'print' отправляется в 'output.txt'
+    with open('output.txt', 'w') as f, redirect_stdout(f):
+        print(f'''
 ________________________________________
 Информация о новом заказе внесена в базу.
 
@@ -181,4 +196,61 @@ ________________________________________
 {new_first_IP}, {new_first_IP + 1}, ..., {new_last_IP}.
 
 ''')
+
+else:
+    print("\nнадо поработать над разделением диапазонов")
+    middle_IP = middle_IP_creating(first_IP_parts[0], first_IP_parts[1], first_IP_parts[2])
+    list_1 = create_IP_list(new_first_IP, middle_IP)
+    list_2 = create_IP_list(middle_IP + 1, new_last_IP)
+    print(f'''
+{middle_IP}
+{list_1}
+{list_2}
+''')
+    if  len(list_1) < 4 and len(list_2) < 4:
+        line_1 = list_1
+        line_2 = list_2
+    elif len(list_1) < 4:
+        line_1 = list_1
+        line_2 = str(middle_IP + 1) + ', ' + str(middle_IP + 2) + ', ... ' + str(new_last_IP + 1)
+    elif len(list_2) < 4:
+        line_1 = str(new_first_IP) + ', ' + str(new_first_IP + 1) + ', ... ' + str(middle_IP)
+        line_2 = list_2
+    else:
+        line_1 = str(new_first_IP) + ', ' + str(new_first_IP + 1) + ', ... ' + str(middle_IP)
+        line_2 = str(middle_IP + 1) + ', ' + str(middle_IP + 2) + ', ... ' + str(new_last_IP + 1)
+
+    print(f'''
+________________________________________
+Информация о новом заказе внесена в базу.
+
+Требуется заказать этикетки для {equipment_name} {equipment_type} 
+с заводскими номерами {new_first_ZvN} - {new_last_ZvN} и IP
+
+{line_1}, 
+{line_2}.
+
+''')
+    print(', '.join(map(str, list_1)))
+    print(', '.join(map(str, list_2)))
+
+    with open('output.txt', 'w') as f, redirect_stdout(f):
+            print(f'''
+________________________________________
+Информация о новом заказе внесена в базу.
+
+Требуется заказать этикетки для {equipment_name} {equipment_type} 
+с заводскими номерами {new_first_ZvN} - {new_last_ZvN} и IP
+
+{line_1}, 
+{line_2}.
+
+''')
+            print(', '.join(map(str, list_1)))
+            print(', '.join(map(str, list_2)))
+
+
+
+
+
 
