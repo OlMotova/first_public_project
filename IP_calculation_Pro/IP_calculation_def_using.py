@@ -12,13 +12,18 @@ df = pd.read_excel('Main_file_test.xlsx')
 equipment_df = pd.read_excel('equipment_database.xlsx')
 #loading end
 
+def unique_equipment(df, column):
+    unique_equipment_list = df[column].unique()
+    return unique_equipment_list
 
-print(equipment_df['equipment_name'].unique())
+print(unique_equipment(equipment_df, 'equipment_name'))
+#print(equipment_df['equipment_name'].unique())
 equipment_name = input("Введите (скопируйте) имя устройства: ")
 df_2 = df[df['equipment_name'] == equipment_name]
 equipment_df_2 = equipment_df[equipment_df['equipment_name'] == equipment_name]
 
-print(equipment_df_2['equipment_type'].unique())
+print(unique_equipment(equipment_df_2, 'equipment_type'))
+#print(equipment_df_2['equipment_type'].unique())
 equipment_type = input("Введите (скопируйте) тип устройства: ")
 df_3 = df_2[df_2['equipment_type'] == equipment_type]
 equipment_df_3 = equipment_df_2[equipment_df_2['equipment_type'] == equipment_type]
@@ -207,18 +212,18 @@ else:
 {list_1}
 {list_2}
 ''')
-    if  len(list_1) < 4 and len(list_2) < 4:
-        line_1 = list_1
-        line_2 = list_2
+    if len(list_1) < 4 and len(list_2) < 4:
+        line_1 = ', '.join(map(str, list_1))
+        line_2 = ', '.join(map(str, list_2))
     elif len(list_1) < 4:
-        line_1 = list_1
-        line_2 = str(middle_IP + 1) + ', ' + str(middle_IP + 2) + ', ... ' + str(new_last_IP + 1)
+        line_1 = ', '.join(map(str, list_1))
+        line_2 = str(middle_IP + 1) + ', ' + str(middle_IP + 2) + ', ... , ' + str(new_last_IP + 1)
     elif len(list_2) < 4:
-        line_1 = str(new_first_IP) + ', ' + str(new_first_IP + 1) + ', ... ' + str(middle_IP)
-        line_2 = list_2
+        line_1 = str(new_first_IP) + ', ' + str(new_first_IP + 1) + ', ... , ' + str(middle_IP)
+        line_2 = ', '.join(map(str, list_2))
     else:
-        line_1 = str(new_first_IP) + ', ' + str(new_first_IP + 1) + ', ... ' + str(middle_IP)
-        line_2 = str(middle_IP + 1) + ', ' + str(middle_IP + 2) + ', ... ' + str(new_last_IP + 1)
+        line_1 = str(new_first_IP) + ', ' + str(new_first_IP + 1) + ', ... , ' + str(middle_IP)
+        line_2 = str(middle_IP + 1) + ', ' + str(middle_IP + 2) + ', ... , ' + str(new_last_IP + 1)
 
     print(f'''
 ________________________________________
@@ -231,8 +236,6 @@ ________________________________________
 {line_2}.
 
 ''')
-    print(', '.join(map(str, list_1)))
-    print(', '.join(map(str, list_2)))
 
     with open('output.txt', 'w') as f, redirect_stdout(f):
             print(f'''
@@ -246,10 +249,9 @@ ________________________________________
 {line_2}.
 
 ''')
-            print(', '.join(map(str, list_1)))
-            print(', '.join(map(str, list_2)))
 
 
+#input()
 
 
 
