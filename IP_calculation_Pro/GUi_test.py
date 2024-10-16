@@ -5,6 +5,17 @@ import os
 class MainWindow:
     def __init__(self, page: ft.Page):
 
+        self.page = page
+        self.alert_dialog = None
+        self.btn_scan = None
+        self.btn_up_all = None
+        self.tabs = None
+        self.tab_1_class = None
+        self.tab_2_class = None
+        self.conteiner = None
+        self.page.title = 'IW_MD'
+        self.page.bgcolor = ft.colors.BLUE_50  
+        
         if os.path.exists('Main_file_test.xlsx'):
             self.df = pd.read_excel('Main_file_test.xlsx')
         # else:
@@ -25,6 +36,7 @@ class MainWindow:
 
         self.equipments_dropdown = ft.Dropdown(
             label_style=ft.TextStyle(color=ft.colors.WHITE),
+        # Добавляем элементы на страницу        
             hint_text="Выберите оборудование",
             hint_style=ft.TextStyle(color=ft.colors.WHITE),
             bgcolor=ft.colors.BLUE_600,
@@ -96,17 +108,6 @@ class MainWindow:
 
 
 
-        # Добавляем элементы на страницу        
-        self.page = page
-        self.alert_dialog = None
-        self.btn_scan = None
-        self.btn_up_all = None
-        self.tabs = None
-        self.tab_1_class = None
-        self.tab_2_class = None
-        self.conteiner = None
-        self.page.title = 'IW_MD'
-        self.page.bgcolor = ft.colors.BLUE_50  
 
     def unique_equipment(self, df, column):
         unique_equipment_list = df[column].unique()
