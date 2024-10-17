@@ -14,8 +14,6 @@ def df_loading(file_name):
 
 df = df_loading('Main_file.xlsx')
 equipment_df = df_loading('equipment_database.xlsx')
-#df = pd.read_excel('Main_file_test.xlsx')
-#equipment_df = pd.read_excel('equipment_database.xlsx')
 
 #loading end
 
@@ -24,7 +22,6 @@ def unique_equipment(df, column):
     return unique_equipment_list
 
 print(unique_equipment(equipment_df, 'equipment_name'))
-#print(equipment_df['equipment_name'].unique())
 equipment_name = input("Введите (скопируйте) имя устройства: ")
 
 def df_filter(df, column, parameter):
@@ -34,18 +31,12 @@ def df_filter(df, column, parameter):
 df_2 = df_filter(df, 'equipment_name', equipment_name)
 equipment_df_2 = df_filter(equipment_df, 'equipment_name', equipment_name)
 
-#df_2 = df[df['equipment_name'] == equipment_name]
-#equipment_df_2 = equipment_df[equipment_df['equipment_name'] == equipment_name]
-
 print(unique_equipment(equipment_df_2, 'equipment_type'))
-#print(equipment_df_2['equipment_type'].unique())
 equipment_type = input("Введите (скопируйте) тип устройства: ")
 
 df_3 = df_filter(df_2, 'equipment_type', equipment_type)
 equipment_df_3 = df_filter(equipment_df_2, 'equipment_type', equipment_type)
 
-#df_3 = df_2[df_2['equipment_type'] == equipment_type]
-#equipment_df_3 = equipment_df_2[equipment_df_2['equipment_type'] == equipment_type]
 equipment_index = equipment_df_3.index
 equipment_df_3 = equipment_df_3.reset_index(drop = True)
 
