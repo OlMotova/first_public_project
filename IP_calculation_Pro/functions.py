@@ -111,5 +111,38 @@ def IP_range_check(df_base, index): #checks whether the IP address belongs to a 
         print("ОШИБКА: IP вне диапазона")
         sys.exit()
 
+def df_preparing (df_main, df_base, equipment_name, equipment_type):
+    df = df_main
+    equipment_df = df_base
+    df_2 = df_filter(df, 'equipment_name', equipment_name)
+    equipment_df_2 = df_filter(equipment_df, 'equipment_name', equipment_name)
+    df_3 = df_filter(df_2, 'equipment_type', equipment_type)
+    equipment_df_3 = df_filter(equipment_df_2, 'equipment_type', equipment_type)
+    return df, equipment_df, df_3, equipment_df_3
+
+def save_button (df_main, df_base, equipment_name, equipment_type, stickers_count):
+
+    df, equipment_df, df_3, equipment_df_3 = df_preparing(df_main, df_base, equipment_name, equipment_type)
+
+    equipment_index = equipment_df_3.index #РАЗОБРАТЬСЯ!!!!!!!!!!!!!!
+    equipment_df_3 = index_reset(equipment_df_3)
+
+    last_order_number = last_order_number_func (df)
+
+    df_add = {}
+
+    df_add = new_order_creating(df_3, equipment_df_3, stickers_count, last_order_number, equipment_name, equipment_type)
+    #LAUNCHING THE MAIN FUNCTION!!!
+
+
+
+    equipment_index_int = int(equipment_index[0])
+    IP_range_check(equipment_df, equipment_index_int)
+
+    df = df._append(df_add, ignore_index= True)
+
+    df.to_excel("Main_file.xlsx", index=False) #Main file updating with new line/order
+
+
 
 
