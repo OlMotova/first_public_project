@@ -8,7 +8,8 @@ from contextlib import redirect_stdout
 from ipaddress import IPv4Network
 
 #loading start
-def df_loading(file_name):
+
+def df_loading(file_name):  #creating a dataframe from excel file (table)
     df = pd.read_excel(file_name)
     return df
 
@@ -17,14 +18,14 @@ equipment_df = df_loading('equipment_database.xlsx')
 
 #loading end
 
-def unique_equipment(df, column):
+def unique_equipment(df, column):   #creating a list of unique values from the column of data frame
     unique_equipment_list = df[column].unique()
     return unique_equipment_list
 
 print(unique_equipment(equipment_df, 'equipment_name'))
 equipment_name = input("Введите (скопируйте) имя устройства: ")
 
-def df_filter(df, column, parameter):
+def df_filter(df, column, parameter):   #filter: creating a new data frame from the selected one by applying a filter to the selected column by the selected parameter
     df_2 = df[df[column] == parameter]
     return df_2
 
@@ -37,13 +38,27 @@ equipment_type = input("Введите (скопируйте) тип устро�
 df_3 = df_filter(df_2, 'equipment_type', equipment_type)
 equipment_df_3 = df_filter(equipment_df_2, 'equipment_type', equipment_type)
 
-equipment_index = equipment_df_3.index
-equipment_df_3 = equipment_df_3.reset_index(drop = True)
-
 stickers_count = int(input("Введите колличество этикеток: "))
 
+def index_reset(df): #resets line's index in the chosen data frame
+    #global equipment_index
+    #equipment_index = equipment_df_3.index
+    #equipment_df_3 = equipment_df_3.reset_index(drop = True)
+    #equipment_index = df.index
+    updated_df = df.reset_index(drop = True)
+    return updated_df
+# print(f'''ПРОВЕРКА!!! ДО
+# {equipment_df_3}
+# ''')
+equipment_index = equipment_df_3.index #РАЗОБРАТЬСЯ!!!!!!!!!!!!!!
+equipment_df_3 = index_reset(equipment_df_3)
+#print(f'equipment_index = {equipment_index}') #ТЕСТ
+# print(f'''ПРОВЕРКА!!! ПОСЛЕ
+# {equipment_df_3}
+# ''')
 
-def new_order_creating(df_main, df_base):
+#main function
+def new_order_creating(df_main, df_base): #the main function. Return df line with new data for adding to main file
 
     global new_first_IP
     global new_first_ZvN
@@ -64,24 +79,27 @@ def new_order_creating(df_main, df_base):
         print(df_main)
         print('________________________')
         last_ZvN = df_main['last_serial_number'].max()
-        last_IP_ = df_main['last_IP'].max()
+        last_line = df_main['last_serial_number'].idxmax()
+        last_IP_ = df_main.loc[last_line, 'last_IP']
+        #last_IP_ = df_main['last_IP'].max()
         print(f'''Последний используемый IP: {last_IP_}
-        Последний используемый заводской номер: {last_ZvN}''')
+Последний используемый заводской номер: {last_ZvN}
+''')
 
 
-        if df_main['last_serial_number'].idxmax() == df_main['last_IP'].idxmax():
+        if df_main['last_serial_number'].idxmax() != df_main['last_IP'].idxmax():
+            print(f"""Предупреждени! Ошибка вычисления максимального значения: 
+            индекс заводского номера - {df_main['last_serial_number'].idxmax()}
+            индекс IP - {df_main['last_IP'].idxmax()}
+            """)
 
-            last_IP = ipaddress.ip_address(last_IP_)
-            new_last_IP = last_IP + stickers_count
-            new_last_ZvN = last_ZvN + stickers_count
-            new_first_IP = last_IP + 1
-            new_first_ZvN = last_ZvN + 1
-            print(f'Новый последний IP: {new_last_IP}')
+        last_IP = ipaddress.ip_address(last_IP_)
+        new_last_IP = last_IP + stickers_count
+        new_last_ZvN = last_ZvN + stickers_count
+        new_first_IP = last_IP + 1
+        new_first_ZvN = last_ZvN + 1
+        print(f'Новый последний IP: {new_last_IP}')
 
-        else: print(f"""Ошибка вычисления максимального значения: 
-индекс заводского номера: {df_main['last_serial_number'].idxmax()}
-индекс IP: {df_main['last_IP'].idxmax()}
-""")
 
     order_number = df['order_number'].max() + 1
 
@@ -96,11 +114,15 @@ def new_order_creating(df_main, df_base):
         'stickers_count': stickers_count,
         'order_date': datetime.now()}
     return df_add
+#end of main function
 
 df_add = {}
 
+###df_add = new_order_creating(df_3, equipment_df_3) #LAUNCHING THE MAIN FUNCTION!!!
+###df_add.to_excel("output.xlsx", index=False) #запись в файл
+
 if stickers_count > 2:
-    df_add = new_order_creating(df_3, equipment_df_3) #запуск основной функции
+    df_add = new_order_creating(df_3, equipment_df_3) #LAUNCHING THE MAIN FUNCTION!!!
 elif stickers_count == 2:
     print("доработать программу для двух этикеток")
     sys.exit()
@@ -108,19 +130,16 @@ elif stickers_count == 1:
     print("доработать программу для одной этикетки")
     sys.exit()
 elif stickers_count < 1:
-    print("Ошибка ввода числа этикеток!")
+    print("Ошибка ввода числа этикеток!") #
     sys.exit()
 else:
     print("Непонятная проблема!")
     sys.exit()
 
-print(f"equipment_index.to_list: {equipment_index.to_list()}")
+#print(f"equipment_index.to_list: {equipment_index.to_list()}") #bloked after def index_reset(df). name 'equipment_index' is not defined
 
-#if equipment_index == 8:
-#    print("работает")
-#else: print("фигня какая-то")
 
-def IP_range_check(df_base, index):
+def IP_range_check(df_base, index): #checks whether the IP address belongs to a valid range
     min_IP = ipaddress.ip_address(df_base['first_IP'][index])
     max_IP = ipaddress.ip_address(df_base['last_IP'][index])
     min_ZvN = df_base['first_serial_number'][index]
@@ -156,19 +175,16 @@ df = df._append(df_add, ignore_index= True)
 df.to_excel("Main_file.xlsx", index=False) #запись в файл
 
 
-def IP_converter(IP):
+def IP_converter(IP): #splits the IP address into segments
     str_IP = str(IP)
     line_IP = str_IP.split('.')
     return line_IP
 
-def middle_IP_creating(a, b, c):
+def middle_IP_creating(a, b, c): #creating the last IP address in the section named 'middle IP'
     middle_IP= ipaddress.ip_address(str(a) + '.' + str(b) + '.' + str(c) + '.' + '255')
     return middle_IP
 
-#def createList(r1, r2):
-#    return list(range(r1, r2 + 1))
-
-def create_IP_list(r1, r2):
+def create_IP_list(r1, r2): #creating a list of IP addresses for output
     # Testing if range r1 and r2
     # are equal
     if (r1 == r2):
