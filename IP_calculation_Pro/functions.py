@@ -81,82 +81,29 @@ def new_values_calculating (df_main, df_base, stickers_count):
 Последний используемый заводской номер: {last_ZvN}
 ''')
 
-        if df_main['last_serial_number'].idxmax() != df_main['last_IP'].idxmax():
-            print(f"""Предупреждени! Ошибка вычисления максимального значения:
-            индекс заводского номера - {df_main['last_serial_number'].idxmax()}
-            индекс IP - {df_main['last_IP'].idxmax()}
-            """)
+        # if df_main['last_serial_number'].idxmax() != df_main['last_IP'].idxmax():
+        #     print(f"""Предупреждени! Ошибка вычисления максимального значения:
+        #     индекс заводского номера - {df_main['last_serial_number'].idxmax()}
+        #     индекс IP - {df_main['last_IP'].idxmax()}
+        #     """)
 
         last_IP = ipaddress.ip_address(last_IP_)
         new_last_IP = last_IP + stickers_count
         new_last_ZvN = last_ZvN + stickers_count
         new_first_IP = last_IP + 1
         new_first_ZvN = last_ZvN + 1
-        print(f'Новый последний IP: {new_last_IP}')
+        print(f"""
+_______________
+new_last_IP: {new_last_IP}
+new_last_ZvN: {new_last_ZvN}
+_______________
+""")
 
     return new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP
 
 
 
-#main function
-# def new_order_creating(df_main, df_base, stickers_count, last_order_number, equipment_name, equipment_type):
-# #the main function. Return df line with new data for adding to main file
-#
-#     global new_first_IP
-#     global new_first_ZvN
-#     global new_last_IP
-#     global new_last_ZvN
-#     global order_number
-#
-#     if df_main.empty: #работа с новым элементом
-#
-#         new_first_IP_ = df_base['first_IP'][0]
-#         new_first_IP = ipaddress.ip_address(new_first_IP_)
-#         new_first_ZvN = df_base['first_serial_number'][0]
-#         new_last_IP = new_first_IP + stickers_count - 1
-#         new_last_ZvN = new_first_ZvN + stickers_count - 1
-#
-#
-#     else:
-#         print(df_main)
-#         print('________________________')
-#         last_ZvN = df_main['last_serial_number'].max()
-#         last_line = df_main['last_serial_number'].idxmax()
-#         last_IP_ = df_main.loc[last_line, 'last_IP']
-#         #last_IP_ = df_main['last_IP'].max()
-#         print(f'''Последний используемый IP: {last_IP_}
-# Последний используемый заводской номер: {last_ZvN}
-# ''')
-#
-#
-#         if df_main['last_serial_number'].idxmax() != df_main['last_IP'].idxmax():
-#             print(f"""Предупреждени! Ошибка вычисления максимального значения:
-#             индекс заводского номера - {df_main['last_serial_number'].idxmax()}
-#             индекс IP - {df_main['last_IP'].idxmax()}
-#             """)
-#
-#         last_IP = ipaddress.ip_address(last_IP_)
-#         new_last_IP = last_IP + stickers_count
-#         new_last_ZvN = last_ZvN + stickers_count
-#         new_first_IP = last_IP + 1
-#         new_first_ZvN = last_ZvN + 1
-#         print(f'Новый последний IP: {new_last_IP}')
-#
-#
-#     order_number = last_order_number + 1
-#
-#     df_add = {
-#         'order_number': order_number,
-#         'equipment_name': equipment_name,
-#         'equipment_type': equipment_type,
-#         'first_serial_number': new_first_ZvN,
-#         'last_serial_number': new_last_ZvN,
-#         'first_IP': new_first_IP,
-#         'last_IP': new_last_IP,
-#         'stickers_count': stickers_count,
-#         'order_date': datetime.now()}
-#     return df_add
-#end of main function
+
 
 def IP_range_check_and_text_output (df_base, index, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type ):
 #checks whether the IP address belongs to a valid range AND creating text fild for output
@@ -196,14 +143,12 @@ def IP_range_check_and_text_output (df_base, index, new_first_ZvN, new_last_ZvN,
 
     if arrays_equal == True:
         print("Проверка пройдена: IP в одном диапазоне")
+
         text = f'''
-    ________________________________________
-    Информация о новом заказе № {order_number} рассчитана.
+        
+Результат расчета этикеток для {equipment_name} {equipment_type}:
 
-    Требуется заказать этикетки для {equipment_name} {equipment_type} 
-    с заводскими номерами {new_first_ZvN} - {new_last_ZvN} и IP
-
-    {new_first_IP}, {new_first_IP + 1}, ..., {new_last_IP}
+{new_first_ZvN} - {new_first_IP}, {new_first_ZvN + 1} - {new_first_IP + 1}, ..., {new_last_ZvN} - {new_last_IP}
 
     '''
         print(text)
@@ -225,35 +170,46 @@ def IP_range_check_and_text_output (df_base, index, new_first_ZvN, new_last_ZvN,
     else:
         print("\nнадо поработать над разделением диапазонов")
         middle_IP = middle_IP_creating(first_IP_parts[0], first_IP_parts[1], first_IP_parts[2])
-        list_1 = create_IP_list(new_first_IP, middle_IP)
-        list_2 = create_IP_list(middle_IP + 1, new_last_IP)
+        part_of_stickers_count = 255 - int(first_IP_parts[3])
+        middle_ZvN = new_first_ZvN + part_of_stickers_count
+
+        list_IP_1 = create_IP_list(new_first_IP, middle_IP)
+        list_IP_2 = create_IP_list(middle_IP + 1, new_last_IP)
+
+        list_ZvN_1 = create_IP_list(new_first_ZvN, middle_ZvN)
+        list_ZvN_2 = create_IP_list(middle_ZvN + 1, new_last_ZvN)
+
+
+        list_1 = [' - '.join(x) for x in zip(map(str, list_ZvN_1), map(str, list_IP_1))]
+        list_2 = [' - '.join(x) for x in zip(map(str, list_ZvN_2), map(str, list_IP_2))]
         print(f'''
     {middle_IP}
     {list_1}
     {list_2}
     ''')
-        if len(list_1) < 4 and len(list_2) < 4:
+        if len(list_IP_1) < 4 and len(list_IP_2) < 4:
             line_1 = ', '.join(map(str, list_1))
             line_2 = ', '.join(map(str, list_2))
-        elif len(list_1) < 4:
+        elif len(list_IP_1) < 4:
             line_1 = ', '.join(map(str, list_1))
-            line_2 = str(middle_IP + 1) + ', ' + str(middle_IP + 2) + ', ... , ' + str(new_last_IP + 1)
-        elif len(list_2) < 4:
-            line_1 = str(new_first_IP) + ', ' + str(new_first_IP + 1) + ', ... , ' + str(middle_IP)
+            line_2 = f'{middle_ZvN + 1} - {middle_IP + 1}, {middle_ZvN + 2} - {middle_IP + 2}, ... , {new_last_ZvN} - {new_last_IP}'
+            #line_2 = str(middle_IP + 1) + ', ' + str(middle_IP + 2) + ', ... , ' + str(new_last_IP + 1)
+        elif len(list_IP_2) < 4:
+            #line_1 = str(new_first_IP) + ', ' + str(new_first_IP + 1) + ', ... , ' + str(middle_IP)
+            line_1 = f'{new_first_ZvN} - {new_first_IP}, {new_first_ZvN + 1} - {new_first_IP + 1}, ... , {middle_ZvN} - {middle_IP}'
             line_2 = ', '.join(map(str, list_2))
         else:
-            line_1 = str(new_first_IP) + ', ' + str(new_first_IP + 1) + ', ... , ' + str(middle_IP)
-            line_2 = str(middle_IP + 1) + ', ' + str(middle_IP + 2) + ', ... , ' + str(new_last_IP + 1)
+            #line_1 = str(new_first_IP) + ', ' + str(new_first_IP + 1) + ', ... , ' + str(middle_IP)
+            #line_2 = str(middle_IP + 1) + ', ' + str(middle_IP + 2) + ', ... , ' + str(new_last_IP + 1)
+            line_1 = f'{new_first_ZvN} - {new_first_IP}, {new_first_ZvN + 1} - {new_first_IP + 1}, ... , {middle_ZvN} - {middle_IP}'
+            line_2 = f'{middle_ZvN + 1} - {middle_IP + 1}, {middle_ZvN + 2} - {middle_IP + 2}, ... , {new_last_ZvN} - {new_last_IP}'
 
         text = f'''
-    ________________________________________
-    Информация о новом заказе № {order_number} рассчитана.
 
-    Требуется заказать этикетки для {equipment_name} {equipment_type} 
-    с заводскими номерами {new_first_ZvN} - {new_last_ZvN} и IP
+Результат расчета этикеток для {equipment_name} {equipment_type}:
 
-    {line_1}, 
-    {line_2}.
+{line_1}, 
+{line_2}.
 
     '''
 
@@ -276,20 +232,19 @@ def IP_range_check_and_text_output (df_base, index, new_first_ZvN, new_last_ZvN,
     # ''')
 
 def calculating_button(df_main, df_base, equipment_name, equipment_type, stickers_count):
-    print('Я дошла до этой строки 1')
+
     df, equipment_df, df_3, equipment_df_3 = df_preparing(df_main, df_base, equipment_name, equipment_type)
-    print('Я дошла до этой строки 2')
+
     equipment_index = equipment_df_3.index #would be used for range check
     equipment_df_3 = index_reset(equipment_df_3)
     equipment_index_int = int(equipment_index[0])
-    print('Я дошла до этой строки 3')
+
     new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP = new_values_calculating (df_3, equipment_df_3, stickers_count)
 
     last_order_number = last_order_number_func(df)
 
     order_number = last_order_number + 1
 
-    print(f"ИНДЕКС СТРОКИ - {equipment_index_int}")
 
     text, flag = IP_range_check_and_text_output(equipment_df, equipment_index_int, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type)
 
