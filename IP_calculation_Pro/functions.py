@@ -169,7 +169,9 @@ def IP_range_check_and_text_output (df_base, index, new_first_ZvN, new_last_ZvN,
 ________________________________________
 Информация о новом заказе № {order_number} внесена в базу.    
 '''
-            with open('output.txt', 'w') as f, redirect_stdout(f):
+            filename = datetime.now().strftime(f"Order_{order_number}_%Y-%m-%d_%H-%M-%S.txt")
+
+            with open(filename, 'w') as f, redirect_stdout(f):
                  print(f'''
 Заказ № {order_number}.
 
@@ -259,7 +261,9 @@ ________________________________________
 ________________________________________
 Информация о новом заказе № {order_number} внесена в базу.    
 '''
-            with open('output.txt', 'w') as f, redirect_stdout(f):
+            filename = datetime.now().strftime(f"Order_{order_number}_%Y-%m-%d_%H-%M-%S.txt")
+
+            with open(filename, 'w') as f, redirect_stdout(f):
                 print(f'''
 Заказ № {order_number}.
 
@@ -346,8 +350,10 @@ ________________________________________
 ________________________________________
 Информация о новом заказе № {order_number} внесена в базу.    
 '''
-            with open('output.txt', 'w') as f, redirect_stdout(f):
-                    print(f'''
+            filename = datetime.now().strftime(f"Order_{order_number}_%Y-%m-%d_%H-%M-%S.txt")
+
+            with open(filename, 'w') as f, redirect_stdout(f):
+                print(f'''
 Заказ № {order_number}.
 
 Оборудование: {equipment_name} {equipment_type}
