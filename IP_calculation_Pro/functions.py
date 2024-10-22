@@ -31,8 +31,14 @@ def df_preparing (df_main, df_base, equipment_name, equipment_type): #creating f
     equipment_df = df_base
     df_2 = df_filter(df, 'equipment_name', equipment_name)
     equipment_df_2 = df_filter(equipment_df, 'equipment_name', equipment_name)
-    df_3 = df_filter(df_2, 'equipment_type', equipment_type)
-    equipment_df_3 = df_filter(equipment_df_2, 'equipment_type', equipment_type)
+    df_3_0 = df_filter(df_2, 'equipment_type', equipment_type)
+    df_3 = df_filter(df_3_0, 'ab_label', 'open')
+    equipment_df_3_0 = df_filter(equipment_df_2, 'equipment_type', equipment_type)
+    equipment_df_3 = df_filter(equipment_df_3_0, 'ab_label', 'open')
+
+    df_3.to_excel("df_3.xlsx", index=False)
+    equipment_df_3.to_excel("equipment_df_3.xlsx", index=False)
+
     return df, equipment_df, df_3, equipment_df_3
 def IP_converter(IP): #splits the IP address into segments
     str_IP = str(IP)
@@ -59,6 +65,21 @@ def create_IP_list(r1, r2): #creating a list of IP addresses for output
             res.append(r1)
             r1 += 1
         return res
+
+def IP_subtraction (IP_1, IP_2):
+
+    IP_1_parts = IP_converter(IP_1)
+    IP_2_parts = IP_converter(IP_2)
+
+    arrays_equal = np.array_equal(IP_1_parts[0:2], IP_2_parts[0:2])
+
+    if arrays_equal == True:
+
+        n = (int(IP_2_parts[2]) - int(IP_1_parts[2])) * 256 + (int(IP_2_parts[3]) - int(IP_1_parts[3]))
+        return n
+    else:
+        text = f"Что-то между IPшниками слишком большая разница."
+        return text
 
 def new_values_calculating (df_main, df_base, stickers_count):
 
@@ -99,9 +120,20 @@ new_last_ZvN: {new_last_ZvN}
 _______________
 """)
 
-    return new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP
+    last_base_IP = ipaddress.ip_address(df_base['last_IP'][0])
 
-def new_df_line_creating(order_number, equipment_name, equipment_type, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, stickers_count): #Returns df line with new data for adding to main file
+    if new_last_IP < last_base_IP:
+        ab_label = 'open'
+    elif new_last_IP == last_base_IP:
+        ab_label = 'close'
+    else:
+        print('ОЩИБКА ЭТИКЕТКИ')
+        ab_label = 'error'
+
+
+    return new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, ab_label
+
+def new_df_line_creating(order_number, equipment_name, equipment_type, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, stickers_count, ab_label): #Returns df line with new data for adding to main file
 
     df_add = {
         'order_number': order_number,
@@ -112,9 +144,13 @@ def new_df_line_creating(order_number, equipment_name, equipment_type, new_first
         'first_IP': new_first_IP,
         'last_IP': new_last_IP,
         'stickers_count': stickers_count,
-        'order_date': datetime.now()}
+        'order_date': datetime.now(),
+        'ab_label': ab_label}
     return df_add
 
+def base_update (df_base, index):
+    df_base.at[index, 'ab_label'] = 'close'
+    df_base.to_excel("equipment_database.xlsx", index=False)
 
 
 def IP_range_check_and_text_output (df_base, index, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type, flag):
@@ -410,7 +446,7 @@ def calculating_button(df_main, df_base, equipment_name, equipment_type, sticker
     equipment_df_3 = index_reset(equipment_df_3)
     equipment_index_int = int(equipment_index[0])
 
-    new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP = new_values_calculating (df_3, equipment_df_3, stickers_count)
+    new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, ab_label = new_values_calculating (df_3, equipment_df_3, stickers_count)
 
     last_order_number = last_order_number_func(df)
 
@@ -433,11 +469,11 @@ def save_button (df_main, df_base, equipment_name, equipment_type, stickers_coun
 
     df, equipment_df, df_3, equipment_df_3 = df_preparing(df_main, df_base, equipment_name, equipment_type)
 
-    equipment_index = equipment_df_3.index  # would be used for range check
+    equipment_index = equipment_df_3.index  # would be used for range check and to resave ab_label in base
     equipment_df_3 = index_reset(equipment_df_3)
     equipment_index_int = int(equipment_index[0])
 
-    new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP = new_values_calculating(df_3, equipment_df_3, stickers_count)
+    new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, ab_label = new_values_calculating(df_3, equipment_df_3, stickers_count)
 
     last_order_number = last_order_number_func(df)
 
@@ -452,37 +488,38 @@ ____________________________________________
 TEXT {text}
 
 """)
+    if ab_label == 'close':
+
+        base_update(equipment_df, int(equipment_index[0]))
+
+
+        main_index = df_3.index.tolist()  # would be used for Main_file update
+
+        print(main_index)
+
+        for i in list(main_index):
+            df.at[i, 'ab_label'] = 'close'
+
+        #df.to_excel("new_df.xlsx", index=False)
+
+    if ab_label == 'error':
+        text = 'ОШИБКА ЛЕЙБЛА'
+        return text
+
 
     df_add = {}
 
-    df_add = new_df_line_creating(order_number, equipment_name, equipment_type, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, stickers_count)
+    df_add = new_df_line_creating(order_number, equipment_name, equipment_type, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, stickers_count, ab_label)
     df = df._append(df_add, ignore_index=True)
+
 
     df.to_excel("Main_file.xlsx", index=False) #save new line to file
 
+    #print(f"ВНИМАНИЕ!!!!!!!!!!!!!!!!!!! {int(equipment_index[0])}")
+
+
+
+    print(f'ab_label - {ab_label}')
+
     return text
-
-    # df, equipment_df, df_3, equipment_df_3 = df_preparing(df_main, df_base, equipment_name, equipment_type)
-    #
-    # equipment_index = equipment_df_3.index #would be used for range check
-    # equipment_df_3 = index_reset(equipment_df_3)
-    #
-    # last_order_number = last_order_number_func (df)
-    #
-    # df_add = {}
-    #
-    # df_add = new_order_creating (df_3, equipment_df_3, stickers_count, last_order_number, equipment_name, equipment_type)
-    # #LAUNCHING THE MAIN FUNCTION!!!
-    #
-    #
-    #
-    # equipment_index_int = int(equipment_index[0])
-    # IP_range_check(equipment_df, equipment_index_int)
-    #
-    # df = df._append(df_add, ignore_index= True)
-    #
-    # df.to_excel("Main_file.xlsx", index=False) #Main file updating with new line/order
-
-
-
 
