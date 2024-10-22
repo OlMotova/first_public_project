@@ -100,20 +100,21 @@ class MainWindow:
         )       
         
         # Кнопка подсчета диапазона заказа, пока не нужна
-        self.buttom_count = ft.IconButton(
-            tooltip="Подсчет диапазона",
-            icon=ft.icons.CALCULATE_OUTLINED,
-            icon_size=30,                                          
-            style=self.buttom_style,
-            on_click=self.calc
-        )
+        # self.buttom_count = ft.IconButton(
+        #     tooltip="Подсчет диапазона",
+        #     icon=ft.icons.CALCULATE_OUTLINED,
+        #     icon_size=30,                                          
+        #     style=self.buttom_style,
+        #     on_click=self.calc
+        # )
         # Кнопка первичного подсчета
         self.buttom_write = ft.IconButton (
             tooltip="Подсчет и запись в файл",
             icon=ft.icons.CHECKLIST,
             icon_size=30,
             style=self.buttom_style,
-            on_click=lambda e: self.page.open(self.dlg_modal)
+            # on_click=lambda e: self.page.open(self.dlg_modal)
+            on_click=self.open_dlg
             )
         # окно вывода информации
 
@@ -244,10 +245,10 @@ class MainWindow:
         # ---------------------------------------------------
         self.dlg_modal = ft.AlertDialog(
             modal=True,
-            title=ft.Text("ну и что ты заказывать собрался?"),
-            content=ft.Text("--тут будет написан диапазон--"),
+            title=ft.Text("ну и что заказывать будем?"),
+            # content=ft.Text(f"--тут будет написан диапазон--"),
             actions=[
-                ft.TextButton("я принимаю ответственность", on_click=self.handle_close),
+                ft.TextButton("пойдет", on_click=self.calc),
                 ft.TextButton("нет я уже смешарик", on_click=self.handle_close),
             ],
             actions_alignment=ft.MainAxisAlignment.END,
@@ -293,7 +294,19 @@ class MainWindow:
         self.bottom_sheet.open = True  # Открываем BottomSheet
         self.page.update()  # Обновляем страницу
 
+    def open_dlg(self, e):
 
+        self.type = self.dropdown_type.value
+        self.equipment = self.dropdown_equp.value
+        self.count_stick = int(self.textfield_count.value)
+
+        x,y =calculating_button(self.df,self.equipment_df, self.equipment, self.type, self.count_stick)
+        self.dlg_modal.content = ft.Text(f"{x},{y}")        
+        self.page.open(self.dlg_modal)
+        # self.dlg_modal.open = True
+        self.page.update()
+        
+        
         
 
         
@@ -332,17 +345,18 @@ class MainWindow:
         self.equipment = self.dropdown_equp.value
         self.count_stick = int(self.textfield_count.value)
 
-        x,y =calculating_button(self.df,self.equipment_df, self.equipment, self.type, self.count_stick)
+        z = calculating_button(self.df,self.equipment_df, self.equipment, self.type, self.count_stick)
         # print(self.type,self.equipment,self.count_stick)
         # print(calculating_button())
         self.listview_info.controls.append(
             ft.Text(
-                value=f"({x},{y})",
+                value=f"({z})",
                 color=self.color_text,
                 weight=ft.FontWeight.W_600,
                 selectable=True
             )
         )
+        self.handle_close(e)
         self.page.update()
 
         
