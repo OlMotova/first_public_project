@@ -33,7 +33,11 @@ print(f"""
 {text}
 """)
 
-#save_button (df, equipment_df, equipment_name, equipment_type, stickers_count)
+text_out = save_button (df, equipment_df, equipment_name, equipment_type, stickers_count)
 
+print(f"""
+В ФАЙЛ СОХРАНЯЕТСЯ
+{text_out}
+""")
 
 print("Дальше код не написан")

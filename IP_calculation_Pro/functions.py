@@ -101,11 +101,23 @@ _______________
 
     return new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP
 
+def new_df_line_creating(order_number, equipment_name, equipment_type, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, stickers_count): #Returns df line with new data for adding to main file
+
+    df_add = {
+        'order_number': order_number,
+        'equipment_name': equipment_name,
+        'equipment_type': equipment_type,
+        'first_serial_number': new_first_ZvN,
+        'last_serial_number': new_last_ZvN,
+        'first_IP': new_first_IP,
+        'last_IP': new_last_IP,
+        'stickers_count': stickers_count,
+        'order_date': datetime.now()}
+    return df_add
 
 
 
-
-def IP_range_check_and_text_output (df_base, index, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type ):
+def IP_range_check_and_text_output (df_base, index, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type, flag):
 #checks whether the IP address belongs to a valid range AND creating text fild for output
 
     #check part
@@ -144,13 +156,35 @@ def IP_range_check_and_text_output (df_base, index, new_first_ZvN, new_last_ZvN,
     if arrays_equal == True:
         print("Проверка пройдена: IP в одном диапазоне")
 
-        text = f'''
+        if flag == 'save_flag':
+            text = f'''
+________________________________________
+Информация о новом заказе № {order_number} внесена в базу.
+
+Требуется заказать этикетки для {equipment_name} {equipment_type}:
+
+{new_first_ZvN} - {new_first_IP}, {new_first_ZvN + 1} - {new_first_IP + 1}, ..., {new_last_ZvN} - {new_last_IP}
+    
+'''
+            with open('output.txt', 'w') as f, redirect_stdout(f):
+                 print(f'''
+________________________________________
+Информация о новом заказе № {order_number} внесена в базу.
+
+Требуется заказать этикетки для {equipment_name} {equipment_type}:
+
+{new_first_ZvN} - {new_first_IP}, {new_first_ZvN + 1} - {new_first_IP + 1}, ..., {new_last_ZvN} - {new_last_IP}
+    
+''')
+
+        else:
+            text = f'''
         
 Результат расчета этикеток для {equipment_name} {equipment_type}:
 
 {new_first_ZvN} - {new_first_IP}, {new_first_ZvN + 1} - {new_first_IP + 1}, ..., {new_last_ZvN} - {new_last_IP}
 
-    '''
+'''
         print(text)
         return text, True
 
@@ -245,8 +279,8 @@ def calculating_button(df_main, df_base, equipment_name, equipment_type, sticker
 
     order_number = last_order_number + 1
 
-
-    text, flag = IP_range_check_and_text_output(equipment_df, equipment_index_int, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type)
+    function_flag = 'calculation_flag'
+    text, flag = IP_range_check_and_text_output(equipment_df, equipment_index_int, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type, function_flag)
 
     print(f"""
 ____________________________________________    
@@ -258,28 +292,59 @@ FLAG {flag}
     return text, flag
 
 
-# def save_button (df_main, df_base, equipment_name, equipment_type, stickers_count):
-#
-#     df, equipment_df, df_3, equipment_df_3 = df_preparing(df_main, df_base, equipment_name, equipment_type)
-#
-#     equipment_index = equipment_df_3.index #would be used for range check
-#     equipment_df_3 = index_reset(equipment_df_3)
-#
-#     last_order_number = last_order_number_func (df)
-#
-#     df_add = {}
-#
-#     df_add = new_order_creating (df_3, equipment_df_3, stickers_count, last_order_number, equipment_name, equipment_type)
-#     #LAUNCHING THE MAIN FUNCTION!!!
-#
-#
-#
-#     equipment_index_int = int(equipment_index[0])
-#     IP_range_check(equipment_df, equipment_index_int)
-#
-#     df = df._append(df_add, ignore_index= True)
-#
-#     df.to_excel("Main_file.xlsx", index=False) #Main file updating with new line/order
+def save_button (df_main, df_base, equipment_name, equipment_type, stickers_count):
+
+    df, equipment_df, df_3, equipment_df_3 = df_preparing(df_main, df_base, equipment_name, equipment_type)
+
+    equipment_index = equipment_df_3.index  # would be used for range check
+    equipment_df_3 = index_reset(equipment_df_3)
+    equipment_index_int = int(equipment_index[0])
+
+    new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP = new_values_calculating(df_3, equipment_df_3, stickers_count)
+
+    last_order_number = last_order_number_func(df)
+
+    order_number = last_order_number + 1
+
+    function_flag = 'save_flag'
+    text, flag = IP_range_check_and_text_output(equipment_df, equipment_index_int, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type, function_flag)
+
+    print(f"""
+____________________________________________    
+функция отработала и получила значения
+TEXT {text}
+
+""")
+
+    df_add = {}
+
+    df_add = new_df_line_creating(order_number, equipment_name, equipment_type, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, stickers_count)
+    df = df._append(df_add, ignore_index=True)
+
+    df.to_excel("Main_file.xlsx", index=False) #save new line to file
+
+    return text
+
+    # df, equipment_df, df_3, equipment_df_3 = df_preparing(df_main, df_base, equipment_name, equipment_type)
+    #
+    # equipment_index = equipment_df_3.index #would be used for range check
+    # equipment_df_3 = index_reset(equipment_df_3)
+    #
+    # last_order_number = last_order_number_func (df)
+    #
+    # df_add = {}
+    #
+    # df_add = new_order_creating (df_3, equipment_df_3, stickers_count, last_order_number, equipment_name, equipment_type)
+    # #LAUNCHING THE MAIN FUNCTION!!!
+    #
+    #
+    #
+    # equipment_index_int = int(equipment_index[0])
+    # IP_range_check(equipment_df, equipment_index_int)
+    #
+    # df = df._append(df_add, ignore_index= True)
+    #
+    # df.to_excel("Main_file.xlsx", index=False) #Main file updating with new line/order
 
 
 
