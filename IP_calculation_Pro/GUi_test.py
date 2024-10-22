@@ -345,7 +345,7 @@ class MainWindow:
         self.equipment = self.dropdown_equp.value
         self.count_stick = int(self.textfield_count.value)
 
-        z = calculating_button(self.df,self.equipment_df, self.equipment, self.type, self.count_stick)
+        z = save_button(self.df,self.equipment_df, self.equipment, self.type, self.count_stick)
         # print(self.type,self.equipment,self.count_stick)
         # print(calculating_button())
         self.listview_info.controls.append(
