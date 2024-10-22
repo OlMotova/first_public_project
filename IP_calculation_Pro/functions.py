@@ -81,84 +81,43 @@ def new_values_calculating (df_main, df_base, stickers_count):
 Последний используемый заводской номер: {last_ZvN}
 ''')
 
-        if df_main['last_serial_number'].idxmax() != df_main['last_IP'].idxmax():
-            print(f"""Предупреждени! Ошибка вычисления максимального значения:
-            индекс заводского номера - {df_main['last_serial_number'].idxmax()}
-            индекс IP - {df_main['last_IP'].idxmax()}
-            """)
+        # if df_main['last_serial_number'].idxmax() != df_main['last_IP'].idxmax():
+        #     print(f"""Предупреждени! Ошибка вычисления максимального значения:
+        #     индекс заводского номера - {df_main['last_serial_number'].idxmax()}
+        #     индекс IP - {df_main['last_IP'].idxmax()}
+        #     """)
 
         last_IP = ipaddress.ip_address(last_IP_)
         new_last_IP = last_IP + stickers_count
         new_last_ZvN = last_ZvN + stickers_count
         new_first_IP = last_IP + 1
         new_first_ZvN = last_ZvN + 1
-        print(f'Новый последний IP: {new_last_IP}')
+        print(f"""
+_______________
+new_last_IP: {new_last_IP}
+new_last_ZvN: {new_last_ZvN}
+_______________
+""")
 
     return new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP
 
+def new_df_line_creating(order_number, equipment_name, equipment_type, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, stickers_count): #Returns df line with new data for adding to main file
+
+    df_add = {
+        'order_number': order_number,
+        'equipment_name': equipment_name,
+        'equipment_type': equipment_type,
+        'first_serial_number': new_first_ZvN,
+        'last_serial_number': new_last_ZvN,
+        'first_IP': new_first_IP,
+        'last_IP': new_last_IP,
+        'stickers_count': stickers_count,
+        'order_date': datetime.now()}
+    return df_add
 
 
-#main function
-# def new_order_creating(df_main, df_base, stickers_count, last_order_number, equipment_name, equipment_type):
-# #the main function. Return df line with new data for adding to main file
-#
-#     global new_first_IP
-#     global new_first_ZvN
-#     global new_last_IP
-#     global new_last_ZvN
-#     global order_number
-#
-#     if df_main.empty: #работа с новым элементом
-#
-#         new_first_IP_ = df_base['first_IP'][0]
-#         new_first_IP = ipaddress.ip_address(new_first_IP_)
-#         new_first_ZvN = df_base['first_serial_number'][0]
-#         new_last_IP = new_first_IP + stickers_count - 1
-#         new_last_ZvN = new_first_ZvN + stickers_count - 1
-#
-#
-#     else:
-#         print(df_main)
-#         print('________________________')
-#         last_ZvN = df_main['last_serial_number'].max()
-#         last_line = df_main['last_serial_number'].idxmax()
-#         last_IP_ = df_main.loc[last_line, 'last_IP']
-#         #last_IP_ = df_main['last_IP'].max()
-#         print(f'''Последний используемый IP: {last_IP_}
-# Последний используемый заводской номер: {last_ZvN}
-# ''')
-#
-#
-#         if df_main['last_serial_number'].idxmax() != df_main['last_IP'].idxmax():
-#             print(f"""Предупреждени! Ошибка вычисления максимального значения:
-#             индекс заводского номера - {df_main['last_serial_number'].idxmax()}
-#             индекс IP - {df_main['last_IP'].idxmax()}
-#             """)
-#
-#         last_IP = ipaddress.ip_address(last_IP_)
-#         new_last_IP = last_IP + stickers_count
-#         new_last_ZvN = last_ZvN + stickers_count
-#         new_first_IP = last_IP + 1
-#         new_first_ZvN = last_ZvN + 1
-#         print(f'Новый последний IP: {new_last_IP}')
-#
-#
-#     order_number = last_order_number + 1
-#
-#     df_add = {
-#         'order_number': order_number,
-#         'equipment_name': equipment_name,
-#         'equipment_type': equipment_type,
-#         'first_serial_number': new_first_ZvN,
-#         'last_serial_number': new_last_ZvN,
-#         'first_IP': new_first_IP,
-#         'last_IP': new_last_IP,
-#         'stickers_count': stickers_count,
-#         'order_date': datetime.now()}
-#     return df_add
-#end of main function
 
-def IP_range_check_and_text_output (df_base, index, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type ):
+def IP_range_check_and_text_output (df_base, index, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type, flag):
 #checks whether the IP address belongs to a valid range AND creating text fild for output
 
     #check part
@@ -196,16 +155,44 @@ def IP_range_check_and_text_output (df_base, index, new_first_ZvN, new_last_ZvN,
 
     if arrays_equal == True:
         print("Проверка пройдена: IP в одном диапазоне")
-        text = f'''
-    ________________________________________
-    Информация о новом заказе № {order_number} рассчитана.
 
-    Требуется заказать этикетки для {equipment_name} {equipment_type} 
-    с заводскими номерами {new_first_ZvN} - {new_last_ZvN} и IP
+        if flag == 'save_flag':
+            text = f'''
+Заказ № {order_number}.
 
-    {new_first_IP}, {new_first_IP + 1}, ..., {new_last_IP}
+Оборудование: {equipment_name} {equipment_type}
 
-    '''
+Требуемый диапазон:
+
+{new_first_ZvN} - {new_first_IP}, {new_first_ZvN + 1} - {new_first_IP + 1}, ..., {new_last_ZvN} - {new_last_IP}
+
+________________________________________
+Информация о новом заказе № {order_number} внесена в базу.    
+'''
+            filename = datetime.now().strftime(f"Order_{order_number}_%Y-%m-%d_%H-%M-%S.txt")
+
+            with open(filename, 'w') as f, redirect_stdout(f):
+                 print(f'''
+Заказ № {order_number}.
+
+Оборудование: {equipment_name} {equipment_type}
+
+Требуемый диапазон:
+
+{new_first_ZvN} - {new_first_IP}, {new_first_ZvN + 1} - {new_first_IP + 1}, ..., {new_last_ZvN} - {new_last_IP}
+
+________________________________________
+Информация о новом заказе № {order_number} внесена в базу.  
+''')
+
+        else:
+            text = f'''
+        
+Результат расчета этикеток для {equipment_name} {equipment_type}:
+
+{new_first_ZvN} - {new_first_IP}, {new_first_ZvN + 1} - {new_first_IP + 1}, ..., {new_last_ZvN} - {new_last_IP}
+
+'''
         print(text)
         return text, True
 
@@ -222,44 +209,184 @@ def IP_range_check_and_text_output (df_base, index, new_first_ZvN, new_last_ZvN,
     #
     # ''')
 
-    else:
+    elif int(last_IP_parts[2]) - int(first_IP_parts[2]) == 1:
+        print(f"ОТДЕЛЬНЫЕ части  {int(first_IP_parts[2])}, {int(last_IP_parts[2])}, {int(last_IP_parts[2]) - int(first_IP_parts[2])}")
         print("\nнадо поработать над разделением диапазонов")
         middle_IP = middle_IP_creating(first_IP_parts[0], first_IP_parts[1], first_IP_parts[2])
-        list_1 = create_IP_list(new_first_IP, middle_IP)
-        list_2 = create_IP_list(middle_IP + 1, new_last_IP)
+        part_of_stickers_count = 255 - int(first_IP_parts[3])
+        middle_ZvN = new_first_ZvN + part_of_stickers_count
+
+        list_IP_1 = create_IP_list(new_first_IP, middle_IP)
+        list_IP_2 = create_IP_list(middle_IP + 1, new_last_IP)
+
+        list_ZvN_1 = create_IP_list(new_first_ZvN, middle_ZvN)
+        list_ZvN_2 = create_IP_list(middle_ZvN + 1, new_last_ZvN)
+
+
+        list_1 = [' - '.join(x) for x in zip(map(str, list_ZvN_1), map(str, list_IP_1))]
+        list_2 = [' - '.join(x) for x in zip(map(str, list_ZvN_2), map(str, list_IP_2))]
         print(f'''
     {middle_IP}
     {list_1}
     {list_2}
     ''')
-        if len(list_1) < 4 and len(list_2) < 4:
+        if len(list_IP_1) < 4 and len(list_IP_2) < 4:
             line_1 = ', '.join(map(str, list_1))
             line_2 = ', '.join(map(str, list_2))
-        elif len(list_1) < 4:
+        elif len(list_IP_1) < 4:
             line_1 = ', '.join(map(str, list_1))
-            line_2 = str(middle_IP + 1) + ', ' + str(middle_IP + 2) + ', ... , ' + str(new_last_IP + 1)
-        elif len(list_2) < 4:
-            line_1 = str(new_first_IP) + ', ' + str(new_first_IP + 1) + ', ... , ' + str(middle_IP)
+            line_2 = f'{middle_ZvN + 1} - {middle_IP + 1}, {middle_ZvN + 2} - {middle_IP + 2}, ... , {new_last_ZvN} - {new_last_IP}'
+            #line_2 = str(middle_IP + 1) + ', ' + str(middle_IP + 2) + ', ... , ' + str(new_last_IP + 1)
+        elif len(list_IP_2) < 4:
+            #line_1 = str(new_first_IP) + ', ' + str(new_first_IP + 1) + ', ... , ' + str(middle_IP)
+            line_1 = f'{new_first_ZvN} - {new_first_IP}, {new_first_ZvN + 1} - {new_first_IP + 1}, ... , {middle_ZvN} - {middle_IP}'
             line_2 = ', '.join(map(str, list_2))
         else:
-            line_1 = str(new_first_IP) + ', ' + str(new_first_IP + 1) + ', ... , ' + str(middle_IP)
-            line_2 = str(middle_IP + 1) + ', ' + str(middle_IP + 2) + ', ... , ' + str(new_last_IP + 1)
+            #line_1 = str(new_first_IP) + ', ' + str(new_first_IP + 1) + ', ... , ' + str(middle_IP)
+            #line_2 = str(middle_IP + 1) + ', ' + str(middle_IP + 2) + ', ... , ' + str(new_last_IP + 1)
+            line_1 = f'{new_first_ZvN} - {new_first_IP}, {new_first_ZvN + 1} - {new_first_IP + 1}, ... , {middle_ZvN} - {middle_IP}'
+            line_2 = f'{middle_ZvN + 1} - {middle_IP + 1}, {middle_ZvN + 2} - {middle_IP + 2}, ... , {new_last_ZvN} - {new_last_IP}'
 
-        text = f'''
-    ________________________________________
-    Информация о новом заказе № {order_number} рассчитана.
+        if flag == 'save_flag':
+            text = f'''
+Заказ № {order_number}.
 
-    Требуется заказать этикетки для {equipment_name} {equipment_type} 
-    с заводскими номерами {new_first_ZvN} - {new_last_ZvN} и IP
+Оборудование: {equipment_name} {equipment_type}
 
+Требуемый диапазон:
+
+{line_1}, 
+{line_2}.    
+
+________________________________________
+Информация о новом заказе № {order_number} внесена в базу.    
+'''
+            filename = datetime.now().strftime(f"Order_{order_number}_%Y-%m-%d_%H-%M-%S.txt")
+
+            with open(filename, 'w') as f, redirect_stdout(f):
+                print(f'''
+Заказ № {order_number}.
+
+Оборудование: {equipment_name} {equipment_type}
+
+Требуемый диапазон:
+
+{line_1}, 
+{line_2}. 
+
+________________________________________
+Информация о новом заказе № {order_number} внесена в базу.  
+''')
+        else:
+
+            text = f'''
+    
+    Результат расчета этикеток для {equipment_name} {equipment_type}:
+    
     {line_1}, 
     {line_2}.
+    
+        '''
 
-    '''
+    elif int(last_IP_parts[2]) - int(first_IP_parts[2]) == 2:
+        print(
+            f"ОТДЕЛЬНЫЕ части  {int(first_IP_parts[2])}, {int(last_IP_parts[2])}, {int(last_IP_parts[2]) - int(first_IP_parts[2])}")
+        print("\nнадо поработать над разделением диапазонов")
+        middle_IP_1 = middle_IP_creating(first_IP_parts[0], first_IP_parts[1], first_IP_parts[2])
+        part_of_stickers_count = 255 - int(first_IP_parts[3])
+        middle_ZvN_1 = new_first_ZvN + part_of_stickers_count
+
+        middle_IP_2 = middle_IP_creating(first_IP_parts[0], first_IP_parts[1], int(first_IP_parts[2]) + 1)
+
+        middle_ZvN_2 = new_first_ZvN + part_of_stickers_count + 256
 
 
-        print(text)
-        return text, True
+        list_IP_1 = create_IP_list(new_first_IP, middle_IP_1)
+        list_IP_2 = create_IP_list(middle_IP_1 + 1, middle_IP_2)
+        list_IP_3 = create_IP_list(middle_IP_2 + 1, new_last_IP)
+
+        list_ZvN_1 = create_IP_list(new_first_ZvN, middle_ZvN_1)
+        list_ZvN_2 = create_IP_list(middle_ZvN_1 + 1, middle_ZvN_2)
+        list_ZvN_3 = create_IP_list(middle_ZvN_2 + 1, new_last_ZvN)
+
+        list_1 = [' - '.join(x) for x in zip(map(str, list_ZvN_1), map(str, list_IP_1))]
+        list_2 = [' - '.join(x) for x in zip(map(str, list_ZvN_2), map(str, list_IP_2))]
+        list_3 = [' - '.join(x) for x in zip(map(str, list_ZvN_3), map(str, list_IP_3))]
+        print(f'''
+        {middle_IP_1} - {middle_IP_2}
+        {list_1}
+        {list_2}
+        {list_3}
+        ''')
+        if len(list_IP_1) < 4 and len(list_IP_3) < 4:
+            line_1 = ', '.join(map(str, list_1))
+            line_2 = f'{middle_ZvN_1 + 1} - {middle_IP_1 + 1}, {middle_ZvN_1 + 2} - {middle_IP_1 + 2}, ... , {middle_ZvN_2} - {middle_IP_2}'
+            line_3 = ', '.join(map(str, list_3))
+        elif len(list_IP_1) < 4:
+            line_1 = ', '.join(map(str, list_1))
+            line_2 = f'{middle_ZvN_1 + 1} - {middle_IP_1 + 1}, {middle_ZvN_1 + 2} - {middle_IP_1 + 2}, ... , {middle_ZvN_2} - {middle_IP_2}'
+            line_3 = f'{middle_ZvN_2 + 1} - {middle_IP_2 + 1}, {middle_ZvN_2 + 2} - {middle_IP_2 + 2}, ... , {new_last_ZvN} - {new_last_IP}'
+        elif len(list_IP_2) < 4:
+            line_1 = f'{new_first_ZvN} - {new_first_IP}, {new_first_ZvN + 1} - {new_first_IP + 1}, ... , {middle_ZvN_1} - {middle_IP_1}'
+            line_2 = f'{middle_ZvN_1 + 1} - {middle_IP_1 + 1}, {middle_ZvN_1 + 2} - {middle_IP_1 + 2}, ... , {middle_ZvN_2} - {middle_IP_2}'
+            line_3 = ', '.join(map(str, list_3))
+        else:
+            line_1 = f'{new_first_ZvN} - {new_first_IP}, {new_first_ZvN + 1} - {new_first_IP + 1}, ... , {middle_ZvN_1} - {middle_IP_1}'
+            line_2 = f'{middle_ZvN_1 + 1} - {middle_IP_1 + 1}, {middle_ZvN_1 + 2} - {middle_IP_1 + 2}, ... , {middle_ZvN_2} - {middle_IP_2}'
+            line_3 = f'{middle_ZvN_2 + 1} - {middle_IP_2 + 1}, {middle_ZvN_2 + 2} - {middle_IP_2 + 2}, ... , {new_last_ZvN} - {new_last_IP}'
+
+        if flag == 'save_flag':
+            text = f'''
+Заказ № {order_number}.
+
+Оборудование: {equipment_name} {equipment_type}
+
+Требуемый диапазон:
+
+{line_1}, 
+{line_2},
+{line_3}.  
+
+________________________________________
+Информация о новом заказе № {order_number} внесена в базу.    
+'''
+            filename = datetime.now().strftime(f"Order_{order_number}_%Y-%m-%d_%H-%M-%S.txt")
+
+            with open(filename, 'w') as f, redirect_stdout(f):
+                print(f'''
+Заказ № {order_number}.
+
+Оборудование: {equipment_name} {equipment_type}
+
+Требуемый диапазон:
+
+{line_1}, 
+{line_2},
+{line_3}.
+
+________________________________________
+Информация о новом заказе № {order_number} внесена в базу.  
+''')
+        else:
+            text = f'''
+
+Результат расчета этикеток для {equipment_name} {equipment_type}:
+
+{line_1}, 
+{line_2},
+{line_3}.
+
+'''
+
+
+    else:
+
+        text = 'А не дофига ли???'
+        #text = f"ВНИМАНИЕ!!! {int(first_IP_parts[2])}, {int(last_IP_parts[2])}, {int(last_IP_parts[2]) - int(first_IP_parts[2])}"
+        return text, False
+
+    print(text)
+    return text, True
 
 
     #     with open('output.txt', 'w') as f, redirect_stdout(f):
@@ -276,22 +403,21 @@ def IP_range_check_and_text_output (df_base, index, new_first_ZvN, new_last_ZvN,
     # ''')
 
 def calculating_button(df_main, df_base, equipment_name, equipment_type, stickers_count):
-    print('Я дошла до этой строки 1')
+
     df, equipment_df, df_3, equipment_df_3 = df_preparing(df_main, df_base, equipment_name, equipment_type)
-    print('Я дошла до этой строки 2')
+
     equipment_index = equipment_df_3.index #would be used for range check
     equipment_df_3 = index_reset(equipment_df_3)
     equipment_index_int = int(equipment_index[0])
-    print('Я дошла до этой строки 3')
+
     new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP = new_values_calculating (df_3, equipment_df_3, stickers_count)
 
     last_order_number = last_order_number_func(df)
 
     order_number = last_order_number + 1
 
-    print(f"ИНДЕКС СТРОКИ - {equipment_index_int}")
-
-    text, flag = IP_range_check_and_text_output(equipment_df, equipment_index_int, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type)
+    function_flag = 'calculation_flag'
+    text, flag = IP_range_check_and_text_output(equipment_df, equipment_index_int, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type, function_flag)
 
     print(f"""
 ____________________________________________    
@@ -303,28 +429,59 @@ FLAG {flag}
     return text, flag
 
 
-# def save_button (df_main, df_base, equipment_name, equipment_type, stickers_count):
-#
-#     df, equipment_df, df_3, equipment_df_3 = df_preparing(df_main, df_base, equipment_name, equipment_type)
-#
-#     equipment_index = equipment_df_3.index #would be used for range check
-#     equipment_df_3 = index_reset(equipment_df_3)
-#
-#     last_order_number = last_order_number_func (df)
-#
-#     df_add = {}
-#
-#     df_add = new_order_creating (df_3, equipment_df_3, stickers_count, last_order_number, equipment_name, equipment_type)
-#     #LAUNCHING THE MAIN FUNCTION!!!
-#
-#
-#
-#     equipment_index_int = int(equipment_index[0])
-#     IP_range_check(equipment_df, equipment_index_int)
-#
-#     df = df._append(df_add, ignore_index= True)
-#
-#     df.to_excel("Main_file.xlsx", index=False) #Main file updating with new line/order
+def save_button (df_main, df_base, equipment_name, equipment_type, stickers_count):
+
+    df, equipment_df, df_3, equipment_df_3 = df_preparing(df_main, df_base, equipment_name, equipment_type)
+
+    equipment_index = equipment_df_3.index  # would be used for range check
+    equipment_df_3 = index_reset(equipment_df_3)
+    equipment_index_int = int(equipment_index[0])
+
+    new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP = new_values_calculating(df_3, equipment_df_3, stickers_count)
+
+    last_order_number = last_order_number_func(df)
+
+    order_number = last_order_number + 1
+
+    function_flag = 'save_flag'
+    text, flag = IP_range_check_and_text_output(equipment_df, equipment_index_int, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type, function_flag)
+
+    print(f"""
+____________________________________________    
+функция отработала и получила значения
+TEXT {text}
+
+""")
+
+    df_add = {}
+
+    df_add = new_df_line_creating(order_number, equipment_name, equipment_type, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, stickers_count)
+    df = df._append(df_add, ignore_index=True)
+
+    df.to_excel("Main_file.xlsx", index=False) #save new line to file
+
+    return text
+
+    # df, equipment_df, df_3, equipment_df_3 = df_preparing(df_main, df_base, equipment_name, equipment_type)
+    #
+    # equipment_index = equipment_df_3.index #would be used for range check
+    # equipment_df_3 = index_reset(equipment_df_3)
+    #
+    # last_order_number = last_order_number_func (df)
+    #
+    # df_add = {}
+    #
+    # df_add = new_order_creating (df_3, equipment_df_3, stickers_count, last_order_number, equipment_name, equipment_type)
+    # #LAUNCHING THE MAIN FUNCTION!!!
+    #
+    #
+    #
+    # equipment_index_int = int(equipment_index[0])
+    # IP_range_check(equipment_df, equipment_index_int)
+    #
+    # df = df._append(df_add, ignore_index= True)
+    #
+    # df.to_excel("Main_file.xlsx", index=False) #Main file updating with new line/order
 
 
 
