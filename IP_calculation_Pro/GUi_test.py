@@ -99,7 +99,7 @@ class MainWindow:
             border_radius=20
         )       
         
-        # Кнопка подсчета диапазона заказа
+        # Кнопка подсчета диапазона заказа, пока не нужна
         self.buttom_count = ft.IconButton(
             tooltip="Подсчет диапазона",
             icon=ft.icons.CALCULATE_OUTLINED,
@@ -107,14 +107,14 @@ class MainWindow:
             style=self.buttom_style,
             on_click=self.calc
         )
-        # Кнопка записи в файл данных
-        self.buttom_write = ft.IconButton(
+        # Кнопка первичного подсчета
+        self.buttom_write = ft.IconButton (
             tooltip="Подсчет и запись в файл",
             icon=ft.icons.CHECKLIST,
             icon_size=30,
-            style=self.buttom_style
-            # on_click=self.click_firmware
-        )
+            style=self.buttom_style,
+            on_click=lambda e: self.page.open(self.dlg_modal)
+            )
         # окно вывода информации
 
         self.listview_info = ft.ListView(expand=True, auto_scroll=True)
@@ -241,7 +241,23 @@ class MainWindow:
             open=False  # Начально закрыт
         )
 
-        # Функция для открытия BottomSheet
+        # ---------------------------------------------------
+        self.dlg_modal = ft.AlertDialog(
+            modal=True,
+            title=ft.Text("ну и что ты заказывать собрался?"),
+            content=ft.Text("--тут будет написан диапазон--"),
+            actions=[
+                ft.TextButton("я принимаю ответственность", on_click=self.handle_close),
+                ft.TextButton("нет я уже смешарик", on_click=self.handle_close),
+            ],
+            actions_alignment=ft.MainAxisAlignment.END,
+            on_dismiss=lambda e: page.add(
+                ft.Text("Modal dialog dismissed"),
+            ),
+        )
+
+    
+
 
         self.count_main = ft.Container(            
             content=ft.Column(                
@@ -252,7 +268,7 @@ class MainWindow:
                     ft.Row(
                         controls=[
                             self.textfield_count,
-                            self.buttom_count,
+                            # self.buttom_count,
                             self.buttom_write
                         ],
                         alignment=ft.MainAxisAlignment.CENTER                    
@@ -264,7 +280,14 @@ class MainWindow:
                 ]
             )
         )
+
+    def handle_close(self,e):
+        self.page.close(self.dlg_modal)
+            # page.add(ft.Text(f"Modal dialog closed with action: {e.control.text}"))
+
+            
         
+        # Функция для открытия BottomSheet
     def show_bottom_sheet(self, e):
         print("BottomSheet: ")
         self.bottom_sheet.open = True  # Открываем BottomSheet
