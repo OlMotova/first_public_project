@@ -142,9 +142,23 @@ class MainWindow:
 
 # -----------------------------------------------------------------------------------
         
+        self.dropdown_new_equp = ft.Dropdown(
+            label_style=ft.TextStyle(color=ft.colors.WHITE),
+            hint_text="Выберите оборудование",
+            hint_style=ft.TextStyle(color=ft.colors.WHITE),
+            bgcolor="#2c2c2c",
+            border_radius=10,
+            focused_border_color=ft.colors.TRANSPARENT,
+            border_color="#2c2c2c",
+            color=ft.colors.WHITE,
+            options=dropdown_equi_option + [ft.dropdown.Option("Другой...")],  # Добавляем опцию "Другой"
+            on_change=self.equipments_dropdown_new_change
+        )
+
         # ввод нового оборудования
-        self.textfield_name = ft.TextField(
-            label='Название',
+        self.textfield_custom_name = ft.TextField(
+            visible=False,
+            label='новое оборудование',
             label_style=ft.TextStyle(color=ft.colors.WHITE),
             hint_text="Введите название",
             cursor_color=ft.colors.WHITE,
@@ -152,7 +166,8 @@ class MainWindow:
             border_color="#c1c2bf",
             color=ft.colors.WHITE,
             border_width=1,
-            border_radius=20
+            border_radius=20,
+            on_change=self.custom_input_change # обработчик пользовательского ввода
         )
         # ввод нового типа оборудования
         self.textfield_type = ft.TextField(
@@ -214,20 +229,21 @@ class MainWindow:
         self.cont_up_window = ft.Container(
             content=ft.Column(
                 [
-                    self.textfield_name,
-                    self.textfield_type,
-                    ft.Row(
-                        controls=[
-                        self.textfield_start,
-                        self.textfield_end
-                        ]
-                    ),
-                    ft.Row(
-                        controls=[
-                            self.buttom_append    
-                        ],
-                        alignment=ft.MainAxisAlignment.CENTER
-                    )
+                    self.dropdown_new_equp,
+                    self.textfield_custom_name,
+                    # self.textfield_type,
+                    # ft.Row(
+                    #     controls=[
+                    #     self.textfield_start,
+                    #     self.textfield_end
+                    #     ]
+                    # ),
+                    # ft.Row(
+                    #     controls=[
+                    #         self.buttom_append    
+                    #     ],
+                    #     alignment=ft.MainAxisAlignment.CENTER
+                    # )
                 ]
             ),
             padding=20,
@@ -295,21 +311,25 @@ class MainWindow:
         self.page.update()  # Обновляем страницу
 
     def open_dlg(self, e):
+        try:
+            self.type = self.dropdown_type.value
+            self.equipment = self.dropdown_equp.value
+            self.count_stick = int(self.textfield_count.value)
 
-        self.type = self.dropdown_type.value
-        self.equipment = self.dropdown_equp.value
-        self.count_stick = int(self.textfield_count.value)
 
-        x,y =calculating_button(self.df,self.equipment_df, self.equipment, self.type, self.count_stick)
-        self.dlg_modal.content = ft.Text(f"{x},{y}")        
-        self.page.open(self.dlg_modal)
-        # self.dlg_modal.open = True
-        self.page.update()
-        
-        
-        
-
-        
+            self.text,self.index =calculating_button(self.df,self.equipment_df, self.equipment, self.type, self.count_stick)
+            if self.index == True:
+                self.dlg_modal.content = ft.Text(f"{self.text}")        
+                self.page.open(self.dlg_modal)
+                # self.dlg_modal.open = True
+                self.page.update()
+            else:
+                self.listview_info.controls.append(ft.Text("---какая то ошибка подсчета---"))     
+       
+        except ValueError:
+            self.listview_info.controls.append(ft.Text("выберите оборудование и количество этикеток"))
+            self.page.update()
+     
   
 
     def unique_equipment(self, df, column):
@@ -324,6 +344,7 @@ class MainWindow:
             self.equipment_df_2 = self.equipment_df[self.equipment_df['equipment_name'] == selected_value]
             self.update_type_dropdown()
 
+
     def update_type_dropdown(self):
         # Обновление списка для типа
         self.type_list = self.unique_equipment(self.equipment_df_2, 'equipment_type')
@@ -331,11 +352,48 @@ class MainWindow:
         self.dropdown_type.options = dropdown_type_option
         self.page.update()
 
+        
+    def equipments_dropdown_new_change(self, e):
+        selected_value = self.dropdown_new_equp.value
+
+        if selected_value:
+            # Фильтрация данных
+            self.equipment_df_2 = self.equipment_df[self.equipment_df['equipment_name'] == selected_value]
+            self.update_type_dropdown()
+
     def type_dropdown_change(self, e):
         selected_value = self.dropdown_type.value
         # Обработка выбора типа
         # print(f"Selected type: {selected_value}")
         return selected_value
+
+    def equipments_dropdown_change(self, e):
+        selected_value = self.dropdown_equp.value
+
+        print(f"Selected value: {selected_value}")  # Для отладки
+
+        if selected_value == "Другой...":
+            # Показываем текстовое поле для ввода пользовательского значения
+            self.textfield_custom_name.visible = True          
+        else:
+            # Если выбран пункт из списка, скрываем текстовое поле
+            self.textfield_custom_name.visible = False
+            # Фильтрация данных
+            self.equipment_df_2 = self.equipment_df[self.equipment_df['equipment_name'] == selected_value]
+            self.update_type_dropdown()
+
+        self.page.update()
+
+    def custom_input_change(self, e):
+    # Получаем значение из текстового поля
+        self.custom_value = self.textfield_custom_name.value
+
+        if self.custom_value:
+            # Обновляем данные с пользовательским вводом
+            self.equipment_df_2 = self.equipment_df[self.equipment_df['equipment_name'] == self.custom_value]
+            self.update_type_dropdown()
+
+        self.page.update()
 
 
 
@@ -345,12 +403,12 @@ class MainWindow:
         self.equipment = self.dropdown_equp.value
         self.count_stick = int(self.textfield_count.value)
 
-        z = save_button(self.df,self.equipment_df, self.equipment, self.type, self.count_stick)
+        self.letter = save_button(self.df,self.equipment_df, self.equipment, self.type, self.count_stick)
         # print(self.type,self.equipment,self.count_stick)
         # print(calculating_button())
         self.listview_info.controls.append(
             ft.Text(
-                value=f"({z})",
+                value=f"{self.letter}",
                 color=self.color_text,
                 weight=ft.FontWeight.W_600,
                 selectable=True
@@ -432,7 +490,7 @@ def main(page: ft.Page):
 
     window = MainWindow(page)
     page.window.height = 600
-    page.window.width = 450
+    page.window.width = 550
     window.run()
 
 
