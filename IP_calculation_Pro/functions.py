@@ -212,9 +212,9 @@ def IP_range_check_and_text_output (df_base, index, index_next, new_first_ZvN, n
     first_IP_parts = IP_converter(new_first_IP)
     last_IP_parts = IP_converter(new_last_IP)
 
-    arrays_equal = np.array_equal(first_IP_parts[0:3], last_IP_parts[0:3])
-
-    if arrays_equal == True:
+#    arrays_equal = np.array_equal(first_IP_parts[0:3], last_IP_parts[0:3])
+#    if arrays_equal == True:
+    if first_IP_parts[:2] == last_IP_parts[:2]:
         print("Проверка пройдена: IP в одном диапазоне")
 
         if flag == 'save_flag':
@@ -256,19 +256,6 @@ ________________________________________
 '''
         print(text)
         return text, True
-
-    #     # Вывод 'print' отправляется в 'output.txt'
-    #     with open('output.txt', 'w') as f, redirect_stdout(f):
-    #         print(f'''
-    # ________________________________________
-    # Информация о новом заказе № {order_number} внесена в базу.
-    #
-    # Требуется заказать этикетки для {equipment_name} {equipment_type}
-    # с заводскими номерами {new_first_ZvN} - {new_last_ZvN} и IP
-    #
-    # {new_first_IP}, {new_first_IP + 1}, ..., {new_last_IP}.
-    #
-    # ''')
 
     elif int(last_IP_parts[2]) - int(first_IP_parts[2]) == 1:
         print(f"ОТДЕЛЬНЫЕ части  {int(first_IP_parts[2])}, {int(last_IP_parts[2])}, {int(last_IP_parts[2]) - int(first_IP_parts[2])}")
@@ -512,7 +499,6 @@ def save_button (df_main, df_base, equipment_name, equipment_type, stickers_coun
         return text, False
 
     equipment_index_int = int(equipment_index[0])
-#    index_next = int(equipment_index[1])
 
     new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, ab_label = new_values_calculating(df_2, equipment_df_3, stickers_count)
 
@@ -533,7 +519,7 @@ TEXT {text}
 
         equipment_df_2_current = equipment_df_2.loc[equipment_df_2['first_serial_number'] <= new_last_ZvN]
         main_index = df_2.index.tolist()  # would be used for Main_file update
-        base_index = equipment_df_2_current.index.tolist()
+        base_index = equipment_df_2_current.index.tolist() # would be used for base file update
 
         print(main_index)
         print(base_index)
@@ -543,7 +529,7 @@ TEXT {text}
 
         for j in list(base_index):
 
-            equipment_df.at[j, 'ab_label'] = 'close' #НЕ ВЕРНО!!!!!!!!!!!!!!!!!!!!
+            equipment_df.at[j, 'ab_label'] = 'close'
 
         equipment_df.to_excel("equipment_database.xlsx", index=False)
 
@@ -551,18 +537,12 @@ TEXT {text}
         text = 'ОШИБКА ЛЕЙБЛА'
         return text
 
-
     df_add = {}
 
     df_add = new_df_line_creating(order_number, equipment_name, equipment_type, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, stickers_count, ab_label)
     df = df._append(df_add, ignore_index=True)
 
-
     df.to_excel("Main_file.xlsx", index=False) #save new line to file
-
-    #print(f"ВНИМАНИЕ!!!!!!!!!!!!!!!!!!! {int(equipment_index[0])}")
-
-
 
     print(f'ab_label - {ab_label}')
 
