@@ -19,7 +19,7 @@ def new_equipment_df_line_creating(equipment_name, equipment_type, new_first_ZvN
         'ab_label': ab_label
     }
     return df_add
-def calculating_button_service (df_base, equipment_name, equipment_type, first_ip, last_ip):
+def calculating_button_service (df_base, equipment_name, first_ip, last_ip):
 
     equipment_df_2 = df_filter(df_base, 'equipment_name', equipment_name)
 
@@ -27,6 +27,14 @@ def calculating_button_service (df_base, equipment_name, equipment_type, first_i
     last_IP = ipaddress.IPv4Address(last_ip)
     first_ZvN = equipment_df_2['last_serial_number'].max() + 1
     last_ZvN = first_ZvN + int(last_IP) - int(first_IP)
+
+    text = 'Данные рассчитаны'
+
+    flag = True
+
+    return text, flag, first_ZvN, last_ZvN
+
+def save_button_service (df_base, equipment_name, equipment_type, first_ZvN, last_ZvN, first_IP, last_IP):
 
     ab_label = 'open'
 
@@ -36,8 +44,8 @@ def calculating_button_service (df_base, equipment_name, equipment_type, first_i
 
     df.to_excel("equipment_database.xlsx", index=False) #save new line to file
 
-    text = 'OK'
+    text = 'База обновлена'
 
     flag = True
 
-    return text, flag, first_ZvN, last_ZvN
+    return text, flag

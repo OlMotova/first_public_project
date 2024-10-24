@@ -39,6 +39,10 @@ last_IP = input("Введите конечный IP нового диапазо�
 """Тестируем сервисную часть"""
 #service part
 
-service_text, service_flag, first_ZvN, last_ZvN =  calculating_button_service (equipment_df, equipment_name, equipment_type, first_IP, last_IP)
+service_text, service_flag, first_ZvN, last_ZvN =  calculating_button_service (equipment_df, equipment_name, first_IP, last_IP)
+
+service_text_s, service_flag_s = save_button_service (equipment_df, equipment_name, equipment_type, first_ZvN, last_ZvN, first_IP, last_IP)
 
 print(service_text)
+
+print(service_text_s)
