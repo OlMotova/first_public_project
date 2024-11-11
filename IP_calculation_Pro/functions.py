@@ -29,17 +29,18 @@ def last_order_number_func (df): #returns max value in column 'order_number'
 def df_preparing (df_main, df_base, equipment_name, equipment_type): #creating filtered df
     df = df_main
     equipment_df = df_base
-    df_2 = df_filter(df, 'equipment_name', equipment_name)
-    equipment_df_2 = df_filter(equipment_df, 'equipment_name', equipment_name)
-    df_3_0 = df_filter(df_2, 'equipment_type', equipment_type)
-    df_3 = df_filter(df_3_0, 'ab_label', 'open')
-    equipment_df_3_0 = df_filter(equipment_df_2, 'equipment_type', equipment_type)
-    equipment_df_3 = df_filter(equipment_df_3_0, 'ab_label', 'open')
+    df_2_0 = df_filter(df, 'ab_label', 'open')
+    equipment_df_2_0 = df_filter(equipment_df, 'ab_label', 'open')
+    df_2 = df_filter(df_2_0, 'equipment_name', equipment_name)
+    equipment_df_2 = df_filter(equipment_df_2_0, 'equipment_name', equipment_name)
+    df_3 = df_filter(df_2, 'equipment_type', equipment_type)
+#    df_3 = df_filter(df_3_0, 'ab_label', 'open')
+    equipment_df_3 = df_filter(equipment_df_2, 'equipment_type', equipment_type)
+#    equipment_df_3 = df_filter(equipment_df_3_0, 'ab_label', 'open')
 
-    df_3.to_excel("df_3.xlsx", index=False)
-    equipment_df_3.to_excel("equipment_df_3.xlsx", index=False)
 
-    return df, equipment_df, df_3, equipment_df_3
+
+    return df, equipment_df, df_2, equipment_df_2, equipment_df_3
 def IP_converter(IP): #splits the IP address into segments
     str_IP = str(IP)
     line_IP = str_IP.split('.')
@@ -152,8 +153,23 @@ def base_update (df_base, index):
     df_base.at[index, 'ab_label'] = 'close'
     df_base.to_excel("equipment_database.xlsx", index=False)
 
+def next_index_func (df):
+    index_list = df.index.tolist()
 
-def IP_range_check_and_text_output (df_base, index, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type, flag):
+    print(f'СПИСОК ИНДЕКСОВ - {index_list}')
+
+    len_index_list = len(index_list)
+
+    if len_index_list >= 2:
+        ind = index_list[1]
+        return ind
+
+    else:
+        text = "ПРОДОЛЖЕНИЯ НЕТ"
+        return text
+
+
+def IP_range_check_and_text_output (df_base, index, index_next, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type, flag):
 #checks whether the IP address belongs to a valid range AND creating text fild for output
 
     #check part
@@ -171,7 +187,16 @@ def IP_range_check_and_text_output (df_base, index, new_first_ZvN, new_last_ZvN,
     if min_ZvN <= new_first_ZvN and new_last_ZvN <= max_ZvN:
         print("Проверка пройдена: заводской номер в допустимом диапазоне")
     else:
-        text = f"""ОШИБКА: заводской номер вне диапазона.
+        if isinstance(index_next,int) == True :
+            text = f"""ОШИБКА: заводской номер вне диапазона.
+Для заказа доступно {max_ZvN - new_first_ZvN + 1} этикеток из этого диапазона,
+
+а потом вы можете задействовать следующий: {df_base['first_IP'][index_next]} - {df_base['last_IP'][index_next]}
+
+"""
+
+        else:
+            text = f"""ОШИБКА: заводской номер вне диапазона.
 Для заказа доступно {max_ZvN - new_first_ZvN + 1} этикеток"""
         print(text)
         return text, False
@@ -187,9 +212,9 @@ def IP_range_check_and_text_output (df_base, index, new_first_ZvN, new_last_ZvN,
     first_IP_parts = IP_converter(new_first_IP)
     last_IP_parts = IP_converter(new_last_IP)
 
-    arrays_equal = np.array_equal(first_IP_parts[0:3], last_IP_parts[0:3])
-
-    if arrays_equal == True:
+#    arrays_equal = np.array_equal(first_IP_parts[0:3], last_IP_parts[0:3])
+#    if arrays_equal == True:
+    if first_IP_parts[:2] == last_IP_parts[:2]:
         print("Проверка пройдена: IP в одном диапазоне")
 
         if flag == 'save_flag':
@@ -231,19 +256,6 @@ ________________________________________
 '''
         print(text)
         return text, True
-
-    #     # Вывод 'print' отправляется в 'output.txt'
-    #     with open('output.txt', 'w') as f, redirect_stdout(f):
-    #         print(f'''
-    # ________________________________________
-    # Информация о новом заказе № {order_number} внесена в базу.
-    #
-    # Требуется заказать этикетки для {equipment_name} {equipment_type}
-    # с заводскими номерами {new_first_ZvN} - {new_last_ZvN} и IP
-    #
-    # {new_first_IP}, {new_first_IP + 1}, ..., {new_last_IP}.
-    #
-    # ''')
 
     elif int(last_IP_parts[2]) - int(first_IP_parts[2]) == 1:
         print(f"ОТДЕЛЬНЫЕ части  {int(first_IP_parts[2])}, {int(last_IP_parts[2])}, {int(last_IP_parts[2]) - int(first_IP_parts[2])}")
@@ -440,20 +452,27 @@ ________________________________________
 
 def calculating_button(df_main, df_base, equipment_name, equipment_type, stickers_count):
 
-    df, equipment_df, df_3, equipment_df_3 = df_preparing(df_main, df_base, equipment_name, equipment_type)
+    df, equipment_df, df_2, equipment_df_2, equipment_df_3 = df_preparing(df_main, df_base, equipment_name, equipment_type)
 
     equipment_index = equipment_df_3.index #would be used for range check
+    index_next = next_index_func(equipment_df_3)
+    print(f'index_next!!!! = {index_next}')
     equipment_df_3 = index_reset(equipment_df_3)
+
+    if equipment_df_3.empty:
+        text = "НЕТ СВОБОДНОГО ДИАПАЗОНА"
+        return text, False
+
     equipment_index_int = int(equipment_index[0])
 
-    new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, ab_label = new_values_calculating (df_3, equipment_df_3, stickers_count)
+    new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, ab_label = new_values_calculating (df_2, equipment_df_3, stickers_count)
 
     last_order_number = last_order_number_func(df)
 
     order_number = last_order_number + 1
 
     function_flag = 'calculation_flag'
-    text, flag = IP_range_check_and_text_output(equipment_df, equipment_index_int, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type, function_flag)
+    text, flag = IP_range_check_and_text_output(equipment_df, equipment_index_int, index_next, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type, function_flag)
 
     print(f"""
 ____________________________________________    
@@ -467,20 +486,28 @@ FLAG {flag}
 
 def save_button (df_main, df_base, equipment_name, equipment_type, stickers_count):
 
-    df, equipment_df, df_3, equipment_df_3 = df_preparing(df_main, df_base, equipment_name, equipment_type)
+    df, equipment_df, df_2, equipment_df_2, equipment_df_3 = df_preparing(df_main, df_base, equipment_name, equipment_type)
 
-    equipment_index = equipment_df_3.index  # would be used for range check and to resave ab_label in base
+    equipment_index = equipment_df_3.index  # would be used for range check
+    index_next = next_index_func(equipment_df_3)
+    print(f'index_next!!!! = {index_next}')
+    #equipment_index_2 = equipment_df_2.index  # would be used  to resave ab_label in base
     equipment_df_3 = index_reset(equipment_df_3)
+
+    if equipment_df_3.empty:
+        text = "НЕТ СВОБОДНОГО ДИАПАЗОНА"
+        return text, False
+
     equipment_index_int = int(equipment_index[0])
 
-    new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, ab_label = new_values_calculating(df_3, equipment_df_3, stickers_count)
+    new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, ab_label = new_values_calculating(df_2, equipment_df_3, stickers_count)
 
     last_order_number = last_order_number_func(df)
 
     order_number = last_order_number + 1
 
     function_flag = 'save_flag'
-    text, flag = IP_range_check_and_text_output(equipment_df, equipment_index_int, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type, function_flag)
+    text, flag = IP_range_check_and_text_output(equipment_df, equipment_index_int, index_next, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type, function_flag)
 
     print(f"""
 ____________________________________________    
@@ -490,34 +517,32 @@ TEXT {text}
 """)
     if ab_label == 'close':
 
-        base_update(equipment_df, int(equipment_index[0]))
-
-
-        main_index = df_3.index.tolist()  # would be used for Main_file update
+        equipment_df_2_current = equipment_df_2.loc[equipment_df_2['first_serial_number'] <= new_last_ZvN]
+        main_index = df_2.index.tolist()  # would be used for Main_file update
+        base_index = equipment_df_2_current.index.tolist() # would be used for base file update
 
         print(main_index)
+        print(base_index)
 
         for i in list(main_index):
             df.at[i, 'ab_label'] = 'close'
 
-        #df.to_excel("new_df.xlsx", index=False)
+        for j in list(base_index):
+
+            equipment_df.at[j, 'ab_label'] = 'close'
+
+        equipment_df.to_excel("equipment_database.xlsx", index=False)
 
     if ab_label == 'error':
         text = 'ОШИБКА ЛЕЙБЛА'
         return text
-
 
     df_add = {}
 
     df_add = new_df_line_creating(order_number, equipment_name, equipment_type, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, stickers_count, ab_label)
     df = df._append(df_add, ignore_index=True)
 
-
     df.to_excel("Main_file.xlsx", index=False) #save new line to file
-
-    #print(f"ВНИМАНИЕ!!!!!!!!!!!!!!!!!!! {int(equipment_index[0])}")
-
-
 
     print(f'ab_label - {ab_label}')
 

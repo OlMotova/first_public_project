@@ -2,7 +2,7 @@ import flet as ft
 import pandas as pd 
 import os
 from functions import *
-from program import *
+from service_functions import *
 
 class MainWindow:
     def __init__(self, page: ft.Page):
@@ -544,6 +544,23 @@ class MainWindow:
             self.update_buttom_append_disabled(True, style=self.buttom_style_disabled)
         self.buttom_append.update()
         self.page.update()
+
+    def append_equipment(self, e):
+        # Добавление нового оборудования
+        if self.dropdown_new_equp.value == "Другой...":
+            self.app_equp = self.textfield_custom_name.value
+            self.app_type = self.textfield_custom_type.value
+        else:
+            if self.dropdown_new_type.value == "Другой...":
+                self.app_equp = self.dropdown_new_equp.value
+                self.app_type = self.textfield_custom_name.value
+
+        self.app_equp = self.dropdown_new_equp.value
+        self.app_type = self.dropdown_new_type.value            
+        self.app_start_ip = self.textfield_start.value
+        self.app_end_ip = self.textfield_end.value
+
+            
     
 
 
@@ -581,8 +598,8 @@ class MainWindow:
         self.page.update()
        
     
-   def append_to_list(self, e):
-       if self.dropdown_new_equp.value == "Другой...":
+#    def append_to_list(self, e):
+#        if self.dropdown_new_equp.value == "Другой...":
   
 
     def run(self):

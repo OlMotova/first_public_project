@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from functions import *
+from service_functions import *
 import pandas as pd
 import ipaddress
 from datetime import datetime
@@ -22,23 +23,26 @@ equipment_type = input("Введите (скопируйте) тип устро�
 #df_3 = df_filter(df_2, 'equipment_type', equipment_type)
 #equipment_df_3 = df_filter(equipment_df_2, 'equipment_type', equipment_type)
 
-stickers_count = int(input("Введите колличество этикеток: "))
+#stickers_count = int(input("Введите колличество этикеток: "))
+
+first_IP = input("Введите начальный IP нового диапазона:")
+last_IP = input("Введите конечный IP нового диапазона:")
+
+
 #______________________________________
+"""Заблочена расчетная расть программы"""
+# #program part
+# text, flag = calculating_button (df, equipment_df, equipment_name, equipment_type, stickers_count)
+#
+# text_out = save_button (df, equipment_df, equipment_name, equipment_type, stickers_count)
 
+"""Тестируем сервисную часть"""
+#service part
 
-text, flag = calculating_button (df, equipment_df, equipment_name, equipment_type, stickers_count)
+service_text, service_flag, first_ZvN, last_ZvN =  calculating_button_service (equipment_df, equipment_name, first_IP, last_IP)
 
-print(f"""
-НА ВЫВОД ПОДАЕТСЯ
-{text}
-""")
+service_text_s, service_flag_s = save_button_service (equipment_df, equipment_name, equipment_type, first_ZvN, last_ZvN, first_IP, last_IP)
 
-text_out = save_button (df, equipment_df, equipment_name, equipment_type, stickers_count)
+print(service_text)
 
-print(f"""
-В ФАЙЛ СОХРАНЯЕТСЯ
-{text_out}
-""")
-
-
-print("Дальше код не написан")
+print(service_text_s)
