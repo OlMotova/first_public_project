@@ -46,6 +46,7 @@ class MainWindow:
         # Загружаем файлы через метод load_file
         self.df = self.load_file('Main_file.xlsx')
         self.equipment_df = self.load_file('equipment_database.xlsx')
+        self.equipment_IP_df = self.load_file('equipment_IP_database.xlsx')
 
         # Изначальные данные для оборудования
         self.list_equi = self.unique_equipment(self.equipment_df, 'equipment_name')
@@ -257,7 +258,8 @@ class MainWindow:
         self.buttom_append = ft.ElevatedButton(
             text="Добавить",
             style=self.buttom_style_disabled,
-            disabled = True            
+            disabled = True,
+            on_click=self.open_dlg_app            
         )
         
         self.cont_buttom_append = ft.Container(
@@ -327,7 +329,33 @@ class MainWindow:
             on_dismiss=lambda e: page.add(
                 ft.Text("Modal dialog dismissed"),
             ),
-        )   
+        )
+        self.dlg_err = ft.AlertDialog(
+            modal=True,
+            title=ft.Text("Ошибка"),
+            # content=ft.Text(f"--тут будет написан диапазон--"),
+            actions=[
+                # ft.TextButton("пойдет", on_click=self.calc),
+                ft.TextButton("Какая то ошибка", on_click=self.err_close),
+            ],
+            actions_alignment=ft.MainAxisAlignment.END,
+            on_dismiss=lambda e: page.add(
+                ft.Text("Modal dialog dismissed"),
+            ),
+        )
+        self.dlg_app = ft.AlertDialog(
+            modal=True,
+            title=ft.Text("Добавляем?"),
+            # content=ft.Text(f"--тут будет написан диапазон--"),
+            actions=[
+                ft.TextButton("Действуй решительно", on_click=self.save_equp),
+                ft.TextButton("Нет, я передумал", on_click=self.app_close),
+            ],
+            actions_alignment=ft.MainAxisAlignment.END,
+            on_dismiss=lambda e: page.add(
+                ft.Text("Modal dialog dismissed"),
+            ),
+        )            
 
 
         self.count_main = ft.Container(            
@@ -363,6 +391,12 @@ class MainWindow:
         self.page.close(self.dlg_modal)
             # page.add(ft.Text(f"Modal dialog closed with action: {e.control.text}"))
 
+    def err_close(self,e):
+        self.page.close(self.dlg_err)
+
+    def app_close(self,e):
+        self.page.close(self.dlg_app)
+
             
         
         # Функция для открытия BottomSheet
@@ -378,7 +412,7 @@ class MainWindow:
             self.count_stick = int(self.textfield_count.value)
 
 
-            self.text,self.index =calculating_button(self.df,self.equipment_df, self.equipment, self.type, self.count_stick)
+            self.text,self.index =calculating_button(self.df,self.equipment_IP_df, self.equipment, self.type, self.count_stick)
             if self.index == True: 
                 self.dlg_modal.content = ft.Text(f"{self.text}")        
                 self.page.open(self.dlg_modal)
@@ -390,7 +424,24 @@ class MainWindow:
         except ValueError:
             self.listview_info.controls.append(ft.Text("выберите оборудование и количество этикеток"))
             self.page.update()
-     
+    def open_dlg_app(self, e):
+        try:
+            self.append_equipment(e)
+
+            x, self.index, self.start_zvn, self.end_zvn =calculating_button_service(self.equipment_IP_df, self.app_equp, self.app_start_ip, self.app_end_ip)
+            if self.index == True: 
+                self.dlg_app.content = ft.Text(f"добавляем?")        
+                self.page.open(self.dlg_app)
+                # self.dlg_modal.open = True
+                self.page.update()
+            else:
+                self.dlg_err.content = ft.Text(f"{self.app_start_ip} -  {self.app_end_ip}\n ты похоже перепутал")
+                # self.listview_info.controls.append(ft.Text("---какая то ошибка подсчета---"))     
+       
+        except ValueError:
+            self.dlg_err.content = ft.Text(f"{self.app_start_ip} -  {self.app_end_ip}\n ты похоже перепутал")
+            self.page.open(self.dlg_err)
+            self.page.update()
   
 
     def unique_equipment(self, df, column):
@@ -560,6 +611,10 @@ class MainWindow:
         self.app_start_ip = self.textfield_start.value
         self.app_end_ip = self.textfield_end.value
 
+    def save_equp(self,e):
+        # Сохранение оборудования        
+        save_button_service(self.df, self.equipment_IP_df,self.app_equp,self.app_type,self.start_zvn,self.end_zvn,self.app_start_ip,self.app_end_ip)
+
             
     
 
@@ -583,7 +638,7 @@ class MainWindow:
         self.equipment = self.dropdown_equp.value
         self.count_stick = int(self.textfield_count.value)
 
-        self.letter = save_button(self.df,self.equipment_df, self.equipment, self.type, self.count_stick)
+        self.letter = save_button(self.df,self.equipment_IP_df, self.equipment, self.type, self.count_stick)
         # print(self.type,self.equipment,self.count_stick)
         # print(calculating_button())
         self.listview_info.controls.append(
