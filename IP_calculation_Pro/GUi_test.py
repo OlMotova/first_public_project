@@ -43,14 +43,7 @@ class MainWindow:
                 ft.MaterialState.DEFAULT: ft.colors.WHITE,
             },
         )
-        # Загружаем файлы через метод load_file
-        self.df = self.load_file('Main_file.xlsx')
-        self.equipment_df = self.load_file('equipment_database.xlsx')
-        self.equipment_IP_df = self.load_file('equipment_IP_database.xlsx')
-
-        # Изначальные данные для оборудования
-        self.list_equi = self.unique_equipment(self.equipment_df, 'equipment_name')
-        dropdown_equi_option = [ft.dropdown.Option(item) for item in self.list_equi]
+        
         
         # if os.path.exists('Main_file.xlsx'):
         #     self.df = pd.read_excel('Main_file.xlsx')
@@ -70,7 +63,7 @@ class MainWindow:
         # self.list_equi = self.unique_equipment(self.equipment_df, 'equipment_name')
         # dropdown_equi_option = [ft.dropdown.Option(item) for item in self.list_equi]
 
-
+        
 
         # дропдаун для для названия оборудования
         self.dropdown_equp = ft.Dropdown(
@@ -83,7 +76,7 @@ class MainWindow:
             focused_border_color=ft.colors.TRANSPARENT,
             border_color="#2c2c2c",
             color=ft.colors.WHITE,
-            options=dropdown_equi_option,
+            options=[],
             # expand=True,
             autofocus=True,
             on_change=self.equipments_dropdown_change
@@ -171,7 +164,8 @@ class MainWindow:
             focused_border_color=ft.colors.TRANSPARENT,
             border_color="#2c2c2c",
             color=ft.colors.WHITE,
-            options=dropdown_equi_option + [ft.dropdown.Option("Другой...")],  # Добавляем опцию "Другой"
+            # options=dropdown_equi_option + [ft.dropdown.Option("Другой...")],  # Добавляем опцию "Другой"
+            options=[],
             on_change=self.equipments_dropdown_new_change
         )
 
@@ -379,6 +373,27 @@ class MainWindow:
                 ]
             )
         )
+
+    def update_file(self):
+        # Загружаем файлы через метод load_file
+        self.df = self.load_file('Main_file.xlsx')
+        self.equipment_df = self.load_file('equipment_database.xlsx')
+        self.equipment_IP_df = self.load_file('equipment_IP_database.xlsx')
+
+        # Изначальные данные для оборудования
+        self.list_equi = self.unique_equipment(self.equipment_df, 'equipment_name')
+        dropdown_equi_option_main = [ft.dropdown.Option(item) for item in self.list_equi]
+        dropdown_equi_option_bottom = dropdown_equi_option_main + [ft.dropdown.Option("Другой...")]
+
+        # Обновить Dropdown опции
+        self.dropdown_equp.options = dropdown_equi_option_main
+        self.dropdown_equp.update()  # Обновить отображение Dropdown
+
+        self.dropdown_new_equp.options = dropdown_equi_option_bottom
+        self.dropdown_new_equp.update
+#
+        
+        
     def load_file(self, file_name: str) -> pd.DataFrame:
         """Проверяет наличие файла и загружает его в DataFrame."""
         if os.path.exists(file_name):
@@ -430,7 +445,7 @@ class MainWindow:
 
             self.index, self.start_zvn, self.end_zvn =calculating_button_service(self.equipment_IP_df, self.app_equp, self.app_start_ip, self.app_end_ip)
             if self.index == True: 
-                self.dlg_app.content = ft.Text(f"добавляем?")        
+                self.dlg_app.content = ft.Text(f"Будет добавлено{self.app_equp} - {self.app_type}\n{self.start_zvn} {self.app_start_ip} - {self.end_zvn} {self.app_end_ip}")        
                 self.page.open(self.dlg_app)
                 # self.dlg_modal.open = True
                 self.page.update()
@@ -601,19 +616,23 @@ class MainWindow:
         if self.dropdown_new_equp.value == "Другой...":
             self.app_equp = self.textfield_custom_name.value
             self.app_type = self.textfield_custom_type.value
+            self.flag = True
         else:
             if self.dropdown_new_type.value == "Другой...":
                 self.app_equp = self.dropdown_new_equp.value
                 self.app_type = self.textfield_custom_name.value
+                self.flag = True
 
         self.app_equp = self.dropdown_new_equp.value
         self.app_type = self.dropdown_new_type.value            
         self.app_start_ip = self.textfield_start.value
         self.app_end_ip = self.textfield_end.value
+        
 
     def save_equp(self,e):
         # Сохранение оборудования        
-        save_button_service(self.df, self.equipment_IP_df,self.app_equp,self.app_type,self.start_zvn,self.end_zvn,self.app_start_ip,self.app_end_ip)
+        save_button_service(self.df, self.equipment_IP_df,self.app_equp,self.app_type,self.start_zvn,self.end_zvn,self.app_start_ip,self.app_end_ip, self.flag)
+        self.app_close()
 
             
     
@@ -659,11 +678,12 @@ class MainWindow:
 
     def run(self):
         self.page.add(
-            self.count_main,
-            self.bottom_sheet                          
-            
+            self.count_main)
+        self.update_file()
+        self.page.add(
+             self.bottom_sheet                      
         )
-        self.page.update
+        self.page.update()
 
 def main(page: ft.Page):
 
