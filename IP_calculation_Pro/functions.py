@@ -209,9 +209,9 @@ def IP_range_check_and_text_output (df_base, index, index_next, new_first_ZvN, n
     first_IP_parts = IP_converter(new_first_IP)
     last_IP_parts = IP_converter(new_last_IP)
 
-#    arrays_equal = np.array_equal(first_IP_parts[0:3], last_IP_parts[0:3])
-#    if arrays_equal == True:
-    if first_IP_parts[:2] == last_IP_parts[:2]:
+    arrays_equal = np.array_equal(first_IP_parts[0:3], last_IP_parts[0:3])
+    if arrays_equal == True:
+#    if first_IP_parts[0:3] == last_IP_parts[0:3]:
         print("Проверка пройдена: IP в одном диапазоне")
 
         if flag == 'save_flag':

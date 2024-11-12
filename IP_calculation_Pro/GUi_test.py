@@ -445,13 +445,17 @@ class MainWindow:
 
             self.index, self.start_zvn, self.end_zvn =calculating_button_service(self.equipment_IP_df, self.app_equp, self.app_start_ip, self.app_end_ip)
             if self.index == True: 
-                self.dlg_app.content = ft.Text(f"Будет добавлено{self.app_equp} - {self.app_type}\n{self.start_zvn} {self.app_start_ip} - {self.end_zvn} {self.app_end_ip}")        
+                self.dlg_app.content = ft.Text(f"Будет добавлено {self.app_equp} {self.app_type}\n{self.start_zvn} - {self.app_start_ip} --- {self.end_zvn} - {self.app_end_ip}")
                 self.page.open(self.dlg_app)
                 # self.dlg_modal.open = True
                 self.page.update()
             else:
                 self.dlg_err.content = ft.Text(f"{self.app_start_ip} -  {self.app_end_ip}\n ты похоже перепутал")
-                # self.listview_info.controls.append(ft.Text("---какая то ошибка подсчета---"))     
+                # self.listview_info.controls.append(ft.Text("---какая то ошибка подсчета---"))
+                self.page.open(self.dlg_err)
+                self.page.update()
+
+
        
         except ValueError:
             self.dlg_err.content = ft.Text(f"{self.app_start_ip} -  {self.app_end_ip}\n ты похоже перепутал")
@@ -617,23 +621,24 @@ class MainWindow:
             self.app_equp = self.textfield_custom_name.value
             self.app_type = self.textfield_custom_type.value
             self.flag = True
-        else:
-            if self.dropdown_new_type.value == "Другой...":
+        elif self.dropdown_new_type.value == "Другой...":
                 self.app_equp = self.dropdown_new_equp.value
-                self.app_type = self.textfield_custom_name.value
+                self.app_type = self.textfield_custom_type.value
                 self.flag = True
+        else:
+            self.app_equp = self.dropdown_new_equp.value
+            self.app_type = self.dropdown_new_type.value
+            self.flag = False
 
-        self.app_equp = self.dropdown_new_equp.value
-        self.app_type = self.dropdown_new_type.value            
         self.app_start_ip = self.textfield_start.value
         self.app_end_ip = self.textfield_end.value
         
 
     def save_equp(self,e):
         # Сохранение оборудования        
-        save_button_service(self.df, self.equipment_IP_df,self.app_equp,self.app_type,self.start_zvn,self.end_zvn,self.app_start_ip,self.app_end_ip, self.flag)
-        self.app_close()
-
+        save_button_service(self.equipment_df, self.equipment_IP_df,self.app_equp,self.app_type,self.start_zvn,self.end_zvn,self.app_start_ip,self.app_end_ip, self.flag)
+#        self.app_close()
+        self.app_close(e)
             
     
 
