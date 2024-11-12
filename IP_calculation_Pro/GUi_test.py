@@ -428,7 +428,7 @@ class MainWindow:
         try:
             self.append_equipment(e)
 
-            x, self.index, self.start_zvn, self.end_zvn =calculating_button_service(self.equipment_IP_df, self.app_equp, self.app_start_ip, self.app_end_ip)
+            self.index, self.start_zvn, self.end_zvn =calculating_button_service(self.equipment_IP_df, self.app_equp, self.app_start_ip, self.app_end_ip)
             if self.index == True: 
                 self.dlg_app.content = ft.Text(f"добавляем?")        
                 self.page.open(self.dlg_app)
