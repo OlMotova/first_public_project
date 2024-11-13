@@ -83,7 +83,7 @@ class MainWindow:
         )
         self.dropdown_type = ft.Dropdown(
             label_style=ft.TextStyle(color=ft.colors.WHITE),              
-            hint_text="Выберите оборудование",
+            hint_text="Выберите тип",
             hint_style=ft.TextStyle(color=ft.colors.WHITE),
             bgcolor="#2c2c2c",
             # border_width=5,
@@ -100,7 +100,7 @@ class MainWindow:
         # Изначально пустой dropdown для типа
         self.dropdown_version = ft.Dropdown(
             label_style=ft.TextStyle(color=ft.colors.WHITE),
-            hint_text="Выберите тип",
+            hint_text="Выберите исполнение",
             hint_style=ft.TextStyle(color=ft.colors.WHITE),
             bgcolor="#2c2c2c",
             # border_width=5,
@@ -507,15 +507,16 @@ class MainWindow:
         self.dropdown_version.value = None
         self.dropdown_version.update()
 
-    def type_dropdown_change(self):
+    def type_dropdown_change(self, e):
         selected_value = self.dropdown_type.value
-        if selected_value == "Другой...":
+        if selected_value:
             self.equipment_df_3 = self.equipment_df_2[self.equipment_df_2['equipment_type'] == selected_value]
             self.update_version_dropdown()
         return selected_value
 
-    def update_version_dropdown(self):        
-        # Обновление списка для типа
+    def update_version_dropdown(self):
+        
+        # Обновление списка для версии
         self.version_list = self.unique_equipment(self.equipment_df_3, 'equipment_version')
         dropdown_version_option = [ft.dropdown.Option(item) for item in self.version_list]
         self.dropdown_version.options = dropdown_version_option
