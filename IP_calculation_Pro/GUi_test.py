@@ -397,6 +397,9 @@ class MainWindow:
     def load_file(self, file_name: str) -> pd.DataFrame:
         """Проверяет наличие файла и загружает его в DataFrame."""
         if os.path.exists(file_name):
+            
+            """Добавить функцию проверки!!!!!!!!!!!!!"""
+            
             return pd.read_excel(file_name)
         else:
             print(f"Файл {file_name} не найден.")
@@ -620,7 +623,7 @@ class MainWindow:
         else:
             if self.dropdown_new_type.value == "Другой...":
                 self.app_equp = self.dropdown_new_equp.value
-                self.app_type = self.textfield_custom_name.value
+                self.app_type = self.textfield_custom_type.value
                 self.flag = True
 
         self.app_equp = self.dropdown_new_equp.value
@@ -631,8 +634,8 @@ class MainWindow:
 
     def save_equp(self,e):
         # Сохранение оборудования        
-        save_button_service(self.df, self.equipment_IP_df,self.app_equp,self.app_type,self.start_zvn,self.end_zvn,self.app_start_ip,self.app_end_ip, self.flag)
-        self.app_close()
+        save_button_service(self.equipment_df, self.equipment_IP_df,self.app_equp,self.app_type,self.start_zvn,self.end_zvn,self.app_start_ip,self.app_end_ip, self.flag)
+        self.app_close(e)
 
             
     
