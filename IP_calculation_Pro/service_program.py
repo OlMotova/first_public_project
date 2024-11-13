@@ -22,29 +22,24 @@ equipment_types_df_2 = df_filter(equipment_types_df_1, 'equipment_type', equipme
 print(unique_equipment(equipment_types_df_2, 'equipment_version'))
 equipment_version = input("Введите (скопируйте) исполнение устройства: ")
 
+new =bool(input("Если устройство новое, то введите True: "))
 
 
-
-stickers_count = int(input("Введите колличество этикеток: "))
-
-
-
-#program part
-
-text, flag = calculating_button (df, equipment_IP_df, equipment_name, equipment_type, equipment_version, stickers_count)
-
-text_out = save_button (df, equipment_IP_df, equipment_name, equipment_type, equipment_version, stickers_count)
-
-print(f'''
-TEXT: {text}
-
-flag: {flag}
-
-''')
-
-print(text_out)
+first_IP = input("Введите начальный IP нового диапазона:")
+last_IP = input("Введите конечный IP нового диапазона:")
 
 
+#______________________________________
 
+
+"""Тестируем сервисную часть"""
+#service part
+
+service_flag, first_ZvN, last_ZvN =  calculating_button_service (equipment_IP_df, equipment_name, equipment_type, first_IP, last_IP)
+
+save_button_service (equipment_types_df, equipment_IP_df, equipment_name, equipment_type, equipment_version, first_ZvN, last_ZvN, first_IP, last_IP, new)
+# +1 parameter at the end: True if new equipment
+
+print("УСПЕХ!!!")
 
 

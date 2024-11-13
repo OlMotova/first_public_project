@@ -33,8 +33,11 @@ def df_preparing (df_main, df_base_IP, equipment_name, equipment_type): #creatin
     df_2_0 = df_filter(df, 'ab_label', 'open')
     equipment_IP_df_2_0 = df_filter(equipment_IP_df, 'ab_label', 'open')
 
-    df_2 = df_filter(df_2_0, 'equipment_name', equipment_name)
-    equipment_IP_df_2 = df_filter(equipment_IP_df_2_0, 'equipment_name', equipment_name)
+    df_2_1 = df_filter(df_2_0, 'equipment_name', equipment_name)
+    equipment_IP_df_2_1 = df_filter(equipment_IP_df_2_0, 'equipment_name', equipment_name)
+
+    df_2 = df_filter(df_2_1, 'equipment_type', equipment_type)
+    equipment_IP_df_2 = df_filter(equipment_IP_df_2_1, 'equipment_type', equipment_type)
 
     return df, df_2, equipment_IP_df_2
 
@@ -131,12 +134,13 @@ _______________
 
     return new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, ab_label
 
-def new_df_line_creating(order_number, equipment_name, equipment_type, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, stickers_count, ab_label): #Returns df line with new data for adding to main file
+def new_df_line_creating(order_number, equipment_name, equipment_type, equipment_version, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, stickers_count, ab_label): #Returns df line with new data for adding to main file
 
     df_add = {
         'order_number': order_number,
         'equipment_name': equipment_name,
         'equipment_type': equipment_type,
+        'equipment_version': equipment_version,
         'first_serial_number': new_first_ZvN,
         'last_serial_number': new_last_ZvN,
         'first_IP': new_first_IP,
@@ -166,7 +170,7 @@ def next_index_func (df):
         return text
 
 
-def IP_range_check_and_text_output (df_base, index, index_next, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type, flag):
+def IP_range_check_and_text_output (df_base, index, index_next, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type, equipment_version, flag):
 #checks whether the IP address belongs to a valid range AND creating text fild for output
 
     #check part
@@ -218,7 +222,7 @@ def IP_range_check_and_text_output (df_base, index, index_next, new_first_ZvN, n
             text = f'''
 Заказ № {order_number}.
 
-Оборудование: {equipment_name} {equipment_type}
+Оборудование: {equipment_name} {equipment_type} {equipment_version}
 
 Требуемый диапазон:
 
@@ -233,7 +237,7 @@ ________________________________________
                  print(f'''
 Заказ № {order_number}.
 
-Оборудование: {equipment_name} {equipment_type}
+Оборудование: {equipment_name} {equipment_type} {equipment_version}
 
 Требуемый диапазон:
 
@@ -246,7 +250,7 @@ ________________________________________
         else:
             text = f'''
         
-Результат расчета этикеток для {equipment_name} {equipment_type}:
+Результат расчета этикеток для {equipment_name} {equipment_type} {equipment_version}:
 
 {new_first_ZvN} - {new_first_IP}, {new_first_ZvN + 1} - {new_first_IP + 1}, ..., {new_last_ZvN} - {new_last_IP}
 
@@ -296,7 +300,7 @@ ________________________________________
             text = f'''
 Заказ № {order_number}.
 
-Оборудование: {equipment_name} {equipment_type}
+Оборудование: {equipment_name} {equipment_type} {equipment_version}
 
 Требуемый диапазон:
 
@@ -312,7 +316,7 @@ ________________________________________
                 print(f'''
 Заказ № {order_number}.
 
-Оборудование: {equipment_name} {equipment_type}
+Оборудование: {equipment_name} {equipment_type} {equipment_version}
 
 Требуемый диапазон:
 
@@ -326,7 +330,7 @@ ________________________________________
 
             text = f'''
     
-    Результат расчета этикеток для {equipment_name} {equipment_type}:
+    Результат расчета этикеток для {equipment_name} {equipment_type} {equipment_version}:
     
     {line_1}, 
     {line_2}.
@@ -384,7 +388,7 @@ ________________________________________
             text = f'''
 Заказ № {order_number}.
 
-Оборудование: {equipment_name} {equipment_type}
+Оборудование: {equipment_name} {equipment_type} {equipment_version}
 
 Требуемый диапазон:
 
@@ -401,7 +405,7 @@ ________________________________________
                 print(f'''
 Заказ № {order_number}.
 
-Оборудование: {equipment_name} {equipment_type}
+Оборудование: {equipment_name} {equipment_type} {equipment_version}
 
 Требуемый диапазон:
 
@@ -415,7 +419,7 @@ ________________________________________
         else:
             text = f'''
 
-Результат расчета этикеток для {equipment_name} {equipment_type}:
+Результат расчета этикеток для {equipment_name} {equipment_type} {equipment_version}:
 
 {line_1}, 
 {line_2},
@@ -435,7 +439,7 @@ ________________________________________
 
 
 
-def calculating_button(df_main, df_base_IP, equipment_name, equipment_type, stickers_count):
+def calculating_button(df_main, df_base_IP, equipment_name, equipment_type, equipment_version, stickers_count):
 
     df, df_2, equipment_IP_df_2 = df_preparing(df_main, df_base_IP, equipment_name, equipment_type)
 
@@ -459,7 +463,7 @@ def calculating_button(df_main, df_base_IP, equipment_name, equipment_type, stic
     order_number = last_order_number + 1
 
     function_flag = 'calculation_flag'
-    text, flag = IP_range_check_and_text_output(df_base_IP, equipment_index_int, index_next, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type, function_flag)
+    text, flag = IP_range_check_and_text_output(df_base_IP, equipment_index_int, index_next, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type, equipment_version, function_flag)
 
     print(f"""
 ____________________________________________    
@@ -471,7 +475,7 @@ FLAG {flag}
     return text, flag
 
 
-def save_button (df_main, df_base_IP, equipment_name, equipment_type, stickers_count):
+def save_button (df_main, df_base_IP, equipment_name, equipment_type, equipment_version, stickers_count):
 
     df, df_2, equipment_IP_df_2 = df_preparing(df_main, df_base_IP, equipment_name, equipment_type)
 
@@ -495,7 +499,7 @@ def save_button (df_main, df_base_IP, equipment_name, equipment_type, stickers_c
     order_number = last_order_number + 1
 
     function_flag = 'save_flag'
-    text, flag = IP_range_check_and_text_output(df_base_IP, equipment_index_int, index_next, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type, function_flag)
+    text, flag = IP_range_check_and_text_output(df_base_IP, equipment_index_int, index_next, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, order_number, equipment_name, equipment_type, equipment_version, function_flag)
 
     print(f"""
 ____________________________________________    
@@ -527,7 +531,7 @@ TEXT {text}
 
     df_add = {}
 
-    df_add = new_df_line_creating(order_number, equipment_name, equipment_type, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, stickers_count, ab_label)
+    df_add = new_df_line_creating(order_number, equipment_name, equipment_type, equipment_version, new_first_ZvN, new_last_ZvN, new_first_IP, new_last_IP, stickers_count, ab_label)
     df = df._append(df_add, ignore_index=True)
 
     df.to_excel("Main_file.xlsx", index=False) #save new line to file
