@@ -81,6 +81,21 @@ class MainWindow:
             autofocus=True,
             on_change=self.equipments_dropdown_change
         )
+        self.dropdown_type = ft.Dropdown(
+            label_style=ft.TextStyle(color=ft.colors.WHITE),              
+            hint_text="Выберите оборудование",
+            hint_style=ft.TextStyle(color=ft.colors.WHITE),
+            bgcolor="#2c2c2c",
+            # border_width=5,
+            border_radius=10,
+            focused_border_color=ft.colors.TRANSPARENT,
+            border_color="#2c2c2c",
+            color=ft.colors.WHITE,
+            options=[],
+            # expand=True,
+            autofocus=True,
+            on_change=self.type_dropdown_change
+        )
 
         # Изначально пустой dropdown для типа
         self.dropdown_version = ft.Dropdown(
@@ -357,6 +372,7 @@ class MainWindow:
                 alignment=ft.MainAxisAlignment.CENTER,
                 controls=[
                     self.dropdown_equp,
+                    self.dropdown_type,
                     self.dropdown_version,
                     ft.Row(
                         controls=[
@@ -476,15 +492,36 @@ class MainWindow:
         if selected_value:
             # Фильтрация данных
             self.equipment_df_2 = self.equipment_df[self.equipment_df['equipment_name'] == selected_value]
-            self.update_version_dropdown()
+            self.update_type_dropdown()
 
-
-    def update_version_dropdown(self):
+    def update_type_dropdown(self):
         # Обновление списка для типа
-        self.version_list = self.unique_equipment(self.equipment_df_2, 'equipment_version')
+        self.type_list = self.unique_equipment(self.equipment_df_2, 'equipment_type')
+        dropdown_type_option = [ft.dropdown.Option(item) for item in self.type_list]
+        self.dropdown_type.options = dropdown_type_option
+        self.dropdown_type.value = None  # Сбрасываем выбранное значение второго dropdown
+        self.dropdown_type.update()  # Обновляем отображение второго dropdown
+
+        # Очищаем и обновляем третий dropdown, так как он зависит от второго
+        self.dropdown_version.options = []
+        self.dropdown_version.value = None
+        self.dropdown_version.update()
+
+    def type_dropdown_change(self):
+        selected_value = self.dropdown_type.value
+        if selected_value == "Другой...":
+            self.equipment_df_3 = self.equipment_df_2[self.equipment_df_2['equipment_type'] == selected_value]
+            self.update_version_dropdown()
+        return selected_value
+
+    def update_version_dropdown(self):        
+        # Обновление списка для типа
+        self.version_list = self.unique_equipment(self.equipment_df_3, 'equipment_version')
         dropdown_version_option = [ft.dropdown.Option(item) for item in self.version_list]
         self.dropdown_version.options = dropdown_version_option
-        self.page.update()
+        self.dropdown_version.value = None  # Сбрасываем выбранное значение третьего dropdown
+        self.dropdown_version.update()
+
 
     def version_dropdown_change(self, e):
         selected_value = self.dropdown_version.value
