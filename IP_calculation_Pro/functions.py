@@ -440,6 +440,8 @@ ________________________________________
 
 
 def calculating_button(df_main, df_base_IP, equipment_name, equipment_type, equipment_version, stickers_count):
+    if equipment_version == 'nan':
+        equipment_version = ''
 
     df, df_2, equipment_IP_df_2 = df_preparing(df_main, df_base_IP, equipment_name, equipment_type)
 
@@ -476,6 +478,8 @@ FLAG {flag}
 
 
 def save_button (df_main, df_base_IP, equipment_name, equipment_type, equipment_version, stickers_count):
+    if equipment_version == 'nan':
+        equipment_version = ''
 
     df, df_2, equipment_IP_df_2 = df_preparing(df_main, df_base_IP, equipment_name, equipment_type)
 

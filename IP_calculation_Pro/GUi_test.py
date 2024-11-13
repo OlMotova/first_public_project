@@ -81,11 +81,26 @@ class MainWindow:
             autofocus=True,
             on_change=self.equipments_dropdown_change
         )
+        self.dropdown_type = ft.Dropdown(
+            label_style=ft.TextStyle(color=ft.colors.WHITE),              
+            hint_text="Выберите тип",
+            hint_style=ft.TextStyle(color=ft.colors.WHITE),
+            bgcolor="#2c2c2c",
+            # border_width=5,
+            border_radius=10,
+            focused_border_color=ft.colors.TRANSPARENT,
+            border_color="#2c2c2c",
+            color=ft.colors.WHITE,
+            options=[],
+            # expand=True,
+            autofocus=True,
+            on_change=self.type_dropdown_change
+        )
 
         # Изначально пустой dropdown для типа
-        self.dropdown_type = ft.Dropdown(
+        self.dropdown_version = ft.Dropdown(
             label_style=ft.TextStyle(color=ft.colors.WHITE),
-            hint_text="Выберите тип",
+            hint_text="Выберите исполнение",
             hint_style=ft.TextStyle(color=ft.colors.WHITE),
             bgcolor="#2c2c2c",
             # border_width=5,
@@ -96,7 +111,7 @@ class MainWindow:
             options=[],  # Начально пустой
             # expand=True,
             autofocus=True,
-            on_change=self.type_dropdown_change
+            on_change=self.version_dropdown_change
         )
         # количество наклеек
         self.textfield_count = ft.TextField(
@@ -169,7 +184,7 @@ class MainWindow:
             on_change=self.equipments_dropdown_new_change
         )
 
-        self.dropdown_new_type = ft.Dropdown(
+        self.dropdown_new_version = ft.Dropdown(
             label_style=ft.TextStyle(color=ft.colors.WHITE),
             hint_text="Выберите тип",
             hint_style=ft.TextStyle(color=ft.colors.WHITE),
@@ -182,7 +197,7 @@ class MainWindow:
             options=[],  # Начально пустой
             # expand=True,
             autofocus=True,
-            on_change=self.type_dropdown_new_change
+            on_change=self.version_dropdown_new_change
         )
 
         # ввод нового оборудования
@@ -201,7 +216,7 @@ class MainWindow:
             # self.custom_input_change # обработчик пользовательского ввода
         )
         # ввод нового типа оборудования
-        self.textfield_custom_type = ft.TextField(
+        self.textfield_custom_version = ft.TextField(
             visible=False,
             label='Тип',
             label_style=ft.TextStyle(color=ft.colors.WHITE),
@@ -280,8 +295,8 @@ class MainWindow:
                 [
                     self.dropdown_new_equp,
                     self.textfield_custom_name,
-                    self.dropdown_new_type,
-                    self.textfield_custom_type,      
+                    self.dropdown_new_version,
+                    self.textfield_custom_version,      
                     ft.Row(
                         alignment=ft.MainAxisAlignment.CENTER,
                         controls=[
@@ -358,6 +373,7 @@ class MainWindow:
                 controls=[
                     self.dropdown_equp,
                     self.dropdown_type,
+                    self.dropdown_version,
                     ft.Row(
                         controls=[
                             self.textfield_count,
@@ -397,6 +413,9 @@ class MainWindow:
     def load_file(self, file_name: str) -> pd.DataFrame:
         """Проверяет наличие файла и загружает его в DataFrame."""
         if os.path.exists(file_name):
+            
+            """Добавить функцию проверки!!!!!!!!!!!!!"""
+            
             return pd.read_excel(file_name)
         else:
             print(f"Файл {file_name} не найден.")
@@ -422,12 +441,13 @@ class MainWindow:
 
     def open_dlg(self, e):
         try:
+            self.version = self.dropdown_version.value
             self.type = self.dropdown_type.value
             self.equipment = self.dropdown_equp.value
             self.count_stick = int(self.textfield_count.value)
 
 
-            self.text,self.index =calculating_button(self.df,self.equipment_IP_df, self.equipment, self.type, self.count_stick)
+            self.text,self.index =calculating_button(self.df,self.equipment_IP_df, self.equipment, self.type, self.version, self.count_stick)
             if self.index == True: 
                 self.dlg_modal.content = ft.Text(f"{self.text}")        
                 self.page.open(self.dlg_modal)
@@ -445,7 +465,7 @@ class MainWindow:
 
             self.index, self.start_zvn, self.end_zvn =calculating_button_service(self.equipment_IP_df, self.app_equp, self.app_start_ip, self.app_end_ip)
             if self.index == True: 
-                self.dlg_app.content = ft.Text(f"Будет добавлено {self.app_equp} {self.app_type}\n{self.start_zvn} - {self.app_start_ip} --- {self.end_zvn} - {self.app_end_ip}")
+                self.dlg_app.content = ft.Text(f"Будет добавлено {self.app_equp} {self.app_version}\n{self.start_zvn} - {self.app_start_ip} --- {self.end_zvn} - {self.app_end_ip}")
                 self.page.open(self.dlg_app)
                 # self.dlg_modal.open = True
                 self.page.update()
@@ -475,19 +495,41 @@ class MainWindow:
             self.equipment_df_2 = self.equipment_df[self.equipment_df['equipment_name'] == selected_value]
             self.update_type_dropdown()
 
-
     def update_type_dropdown(self):
         # Обновление списка для типа
         self.type_list = self.unique_equipment(self.equipment_df_2, 'equipment_type')
         dropdown_type_option = [ft.dropdown.Option(item) for item in self.type_list]
         self.dropdown_type.options = dropdown_type_option
-        self.page.update()
+        self.dropdown_type.value = None  # Сбрасываем выбранное значение второго dropdown
+        self.dropdown_type.update()  # Обновляем отображение второго dropdown
+
+        # Очищаем и обновляем третий dropdown, так как он зависит от второго
+        self.dropdown_version.options = []
+        self.dropdown_version.value = None
+        self.dropdown_version.update()
 
     def type_dropdown_change(self, e):
         selected_value = self.dropdown_type.value
+        if selected_value:
+            self.equipment_df_3 = self.equipment_df_2[self.equipment_df_2['equipment_type'] == selected_value]
+            self.update_version_dropdown()
+        return selected_value
+
+    def update_version_dropdown(self):
+        
+        # Обновление списка для версии
+        self.version_list = self.unique_equipment(self.equipment_df_3, 'equipment_version')
+        dropdown_version_option = [ft.dropdown.Option(item) for item in self.version_list]
+        self.dropdown_version.options = dropdown_version_option
+        self.dropdown_version.value = None  # Сбрасываем выбранное значение третьего dropdown
+        self.dropdown_version.update()
+
+
+    def version_dropdown_change(self, e):
+        selected_value = self.dropdown_version.value
         # if selected_value == "Другой...":
         # Обработка выбора типа
-        print(f"Selected type: {selected_value}")
+        print(f"Selected version: {selected_value}")
         return selected_value
 
 
@@ -499,11 +541,11 @@ class MainWindow:
 
         if selected_value == "Другой...":
             # Показываем текстовое поле для ввода пользовательского значения
-            self.dropdown_new_type.visible = False
+            self.dropdown_new_version.visible = False
             self.buttom_append.disabled = True
             self.buttom_append.style = self.buttom_style_disabled
             self.textfield_custom_name.visible = True 
-            self.textfield_custom_type.visible = True
+            self.textfield_custom_version.visible = True
             self.textfield_start.disabled = False
             self.textfield_end.disabled = False
             self.textfield_start.bgcolor = "#5c5a57"
@@ -515,7 +557,7 @@ class MainWindow:
             self.textfield_start.disabled = True
             self.buttom_append.style = self.buttom_style_disabled
             self.buttom_append.disabled = True
-            self.dropdown_new_type.visible = True
+            self.dropdown_new_version.visible = True
             self.textfield_end.disabled = True
             self.textfield_start.value = ""
             self.textfield_start.bgcolor ="#383838"
@@ -525,23 +567,23 @@ class MainWindow:
             self.textfield_end.bgcolor = "#383838"
             # Если выбран пункт из списка, скрываем текстовое поле
             self.textfield_custom_name.visible = False
-            self.textfield_custom_type.visible = False
+            self.textfield_custom_version.visible = False
             # Фильтрация данных
             self.equipment_df_2 = self.equipment_df[self.equipment_df['equipment_name'] == selected_value]
             
-            self.update_type_dropdown_new()
+            self.update_version_dropdown_new()
 
-    def update_type_dropdown_new(self):
+    def update_version_dropdown_new(self):
         # Обновление списка для типа
-        self.type_list = self.unique_equipment(self.equipment_df_2, 'equipment_type')
-        dropdown_new_type_option = [ft.dropdown.Option(item) for item in self.type_list]
-        self.dropdown_new_type.options = dropdown_new_type_option + [ft.dropdown.Option("Другой...")]
+        self.version_list = self.unique_equipment(self.equipment_df_2, 'equipment_version')
+        dropdown_new_version_option = [ft.dropdown.Option(item) for item in self.version_list]
+        self.dropdown_new_version.options = dropdown_new_version_option + [ft.dropdown.Option("Другой...")]
         self.page.update()
 
-    def type_dropdown_new_change(self, e):
-        selected_value = self.dropdown_new_type.value
+    def version_dropdown_new_change(self, e):
+        selected_value = self.dropdown_new_version.value
         if selected_value == "Другой...":
-            self.textfield_custom_type.visible = True
+            self.textfield_custom_version.visible = True
             self.buttom_append.disabled = True
             self.buttom_append.style = self.buttom_style_disabled
             self.textfield_start.disabled = False
@@ -555,7 +597,7 @@ class MainWindow:
             self.textfield_start.disabled = True
             self.buttom_append.style = self.buttom_style_disabled
             self.buttom_append.disabled = True
-            self.dropdown_new_type.visible = True
+            self.dropdown_new_version.visible = True
             # self.textfield_end.disabled = True
             self.textfield_start.disabled = False
             self.textfield_end.disabled = False
@@ -567,12 +609,12 @@ class MainWindow:
             self.textfield_end.bgcolor ="#5c5a57"
             # Если выбран пункт из списка, скрываем текстовое поле
             self.textfield_custom_name.visible = False
-            self.textfield_custom_type.visible = False
+            self.textfield_custom_version.visible = False
             self.buttom_append.update()
             self.page.update()
             
         # Обработка выбора типа
-            print(f"Selected type: {selected_value}")
+            print(f"Selected version: {selected_value}")
         return selected_value
 
     def is_valid_ip(self, ip):
@@ -598,13 +640,13 @@ class MainWindow:
         # self.buttom_append.disabled = not (ip1_valid and ip2_valid)
         if ip1_valid and ip2_valid:
             if self.dropdown_new_equp.value == "Другой...":    
-                if len(self.textfield_custom_name.value) > 0 and len(self.textfield_custom_type.value) > 0:     
+                if len(self.textfield_custom_name.value) > 0 and len(self.textfield_custom_version.value) > 0:     
                     self.update_buttom_append_disabled(False, style=self.buttom_style)
                 else:
                     self.update_buttom_append_disabled(True, style=self.buttom_style_disabled)
                     
-            elif self.dropdown_new_type.value == "Другой...":
-                if len(self.textfield_custom_type.value) > 0:
+            elif self.dropdown_new_version.value == "Другой...":
+                if len(self.textfield_custom_version.value) > 0:
                     self.update_buttom_append_disabled(False, style=self.buttom_style)                    
                 else:
                     self.update_buttom_append_disabled(True, style=self.buttom_style_disabled)
@@ -619,15 +661,16 @@ class MainWindow:
         # Добавление нового оборудования
         if self.dropdown_new_equp.value == "Другой...":
             self.app_equp = self.textfield_custom_name.value
-            self.app_type = self.textfield_custom_type.value
+            self.app_version = self.textfield_custom_version.value
             self.flag = True
-        elif self.dropdown_new_type.value == "Другой...":
+        elif self.dropdown_new_version.value == "Другой...":
                 self.app_equp = self.dropdown_new_equp.value
-                self.app_type = self.textfield_custom_type.value
+                self.app_version = self.textfield_custom_version.value
+                self.app_version = self.textfield_custom_version.value
                 self.flag = True
         else:
             self.app_equp = self.dropdown_new_equp.value
-            self.app_type = self.dropdown_new_type.value
+            self.app_version = self.dropdown_new_version.value
             self.flag = False
 
         self.app_start_ip = self.textfield_start.value
@@ -636,9 +679,9 @@ class MainWindow:
 
     def save_equp(self,e):
         # Сохранение оборудования        
-        save_button_service(self.equipment_df, self.equipment_IP_df,self.app_equp,self.app_type,self.start_zvn,self.end_zvn,self.app_start_ip,self.app_end_ip, self.flag)
-#        self.app_close()
+        save_button_service(self.equipment_df, self.equipment_IP_df,self.app_equp,self.app_version,self.start_zvn,self.end_zvn,self.app_start_ip,self.app_end_ip, self.flag)
         self.app_close(e)
+
             
     
 
@@ -650,7 +693,7 @@ class MainWindow:
         if self.custom_value:
             # Обновляем данные с пользовательским вводом
             self.equipment_df_2 = self.equipment_df[self.equipment_df['equipment_name'] == self.custom_value]
-            self.update_type_dropdown()
+            self.update_version_dropdown()
 
         self.page.update()
 
@@ -658,12 +701,13 @@ class MainWindow:
 
     def calc(self, e):
         
+        self.version = self.dropdown_version.value
         self.type = self.dropdown_type.value
         self.equipment = self.dropdown_equp.value
         self.count_stick = int(self.textfield_count.value)
 
-        self.letter = save_button(self.df,self.equipment_IP_df, self.equipment, self.type, self.count_stick)
-        # print(self.type,self.equipment,self.count_stick)
+        self.letter = save_button(self.df,self.equipment_IP_df, self.equipment, self.type, self.version, self.count_stick)
+        # print(self.version,self.equipment,self.count_stick)
         # print(calculating_button())
         self.listview_info.controls.append(
             ft.Text(
