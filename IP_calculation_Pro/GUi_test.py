@@ -494,9 +494,9 @@ class MainWindow:
         try:
             self.append_equipment(e)
 
-            self.index, self.start_zvn, self.end_zvn =calculating_button_service(self.equipment_IP_df, self.app_equp, self.app_start_ip, self.app_end_ip)
+            self.index, self.start_zvn, self.end_zvn =calculating_button_service(self.equipment_IP_df, self.app_equp, self.app_type, self.app_start_ip, self.app_end_ip)
             if self.index == True: 
-                self.dlg_app.content = ft.Text(f"Будет добавлено {self.app_equp} {self.app_version}\n{self.start_zvn} - {self.app_start_ip} --- {self.end_zvn} - {self.app_end_ip}")
+                self.dlg_app.content = ft.Text(f"Будет добавлено {self.app_equp} {self.app_type} {self.app_version}\n{self.start_zvn} - {self.app_start_ip} --- {self.end_zvn} - {self.app_end_ip}")
                 self.page.open(self.dlg_app)
                 # self.dlg_modal.open = True
                 self.page.update()
@@ -772,10 +772,11 @@ class MainWindow:
     def calc(self, e):
         
         self.version = self.dropdown_version.value
+        self.type = self.dropdown_type.value
         self.equipment = self.dropdown_equp.value
         self.count_stick = int(self.textfield_count.value)
 
-        self.letter = save_button(self.df,self.equipment_IP_df, self.equipment, self.version, self.count_stick)
+        self.letter = save_button(self.df,self.equipment_IP_df, self.equipment, self.type, self.version, self.count_stick)
         # print(self.version,self.equipment,self.count_stick)
         # print(calculating_button())
         self.listview_info.controls.append(
