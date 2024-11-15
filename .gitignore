@@ -4482,3 +4482,6 @@
 .venv/Scripts/watchmedo.exe
 .venv/share/man/man1/qr.1
 IP_calculation_Pro/GUi_test.py
+IP_calculation_Pro/__pycache__/functions.cpython-38.pyc
+IP_calculation_Pro/__pycache__/functions.cpython-38.pyc
+IP_calculation_Pro/__pycache__/service_functions.cpython-38.pyc
