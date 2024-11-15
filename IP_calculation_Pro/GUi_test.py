@@ -44,27 +44,6 @@ class MainWindow:
             },
         )
         
-        
-        # if os.path.exists('Main_file.xlsx'):
-        #     self.df = pd.read_excel('Main_file.xlsx')
-        # # else:
-        #     # ft.alert('Файл Main_file_test.xlsx не найден.')
-
-        # if os.path.exists('equipment_database.xlsx'):
-        #     self.equipment_df = pd.read_excel('equipment_database.xlsx')
-        # # else:
-        #     # ft.alert('Файл equipment_database.xlsx не найден.')
-
-
-        # self.df = pd.read_excel('Main_file.xlsx')
-        # self.equipment_df = pd.read_excel('equipment_database.xlsx')
-
-        # # Изначальные данные
-        # self.list_equi = self.unique_equipment(self.equipment_df, 'equipment_name')
-        # dropdown_equi_option = [ft.dropdown.Option(item) for item in self.list_equi]
-
-        
-
         # дропдаун для для названия оборудования
         self.dropdown_equp = ft.Dropdown(
             label_style=ft.TextStyle(color=ft.colors.WHITE),              
@@ -420,6 +399,7 @@ class MainWindow:
                 ]
             )
         )
+        
 
     def update_file(self):
         # Загружаем файлы через метод load_file
@@ -494,7 +474,7 @@ class MainWindow:
         try:
             self.append_equipment(e)
 
-            self.index, self.start_zvn, self.end_zvn =calculating_button_service(self.equipment_IP_df, self.app_equp, self.app_start_ip, self.app_end_ip)
+            self.index, self.start_zvn, self.end_zvn =calculating_button_service(self.equipment_IP_df, self.app_equp,self.app_type, self.app_start_ip, self.app_end_ip)
             if self.index == True: 
                 self.dlg_app.content = ft.Text(f"Будет добавлено {self.app_equp} {self.app_version}\n{self.start_zvn} - {self.app_start_ip} --- {self.end_zvn} - {self.app_end_ip}")
                 self.page.open(self.dlg_app)
@@ -509,7 +489,7 @@ class MainWindow:
 
        
         except ValueError:
-            self.dlg_err.content = ft.Text(f"{self.app_start_ip} -  {self.app_end_ip}\n ты похоже перепутал")
+            self.dlg_err.content = ft.Text(f"{self.app_start_ip} -  {self.app_end_ip}\n Что то совсем пошло не так")
             self.page.open(self.dlg_err)
             self.page.update()
   
@@ -603,7 +583,7 @@ class MainWindow:
             
             self.textfield_custom_name.value = None
             self.textfield_custom_type.value = None
-            self.textfield_custom_version.value = None
+            # self.textfield_custom_version.value = None
 
             self.textfield_start.value = None
             self.textfield_start.bgcolor ="#383838"
@@ -625,6 +605,11 @@ class MainWindow:
         self.version_list = self.unique_equipment(self.equipment_df_2, 'equipment_type')
         dropdown_new_type_option = [ft.dropdown.Option(item) for item in self.version_list]
         self.dropdown_new_type.options = dropdown_new_type_option + [ft.dropdown.Option("Другой...")]
+
+        # Очищаем и обновляем третий dropdown, так как он зависит от второго
+        self.dropdown_new_version.options = []
+        self.dropdown_new_version.value = None
+        self.dropdown_new_version.update()
         self.page.update()
 
 
@@ -676,14 +661,19 @@ class MainWindow:
         # Обновление списка для типа
         self.version_list = self.unique_equipment(self.equipment_df_3, 'equipment_version')
         dropdown_new_version_option = [ft.dropdown.Option(item) for item in self.version_list]
-        self.dropdown_new_version.options = dropdown_new_version_option
+        self.dropdown_new_version.options = dropdown_new_version_option + [ft.dropdown.Option("Другой...")]
         self.page.update()
         
     def version_dropdown_new_change(self, e):
         selected_value = self.dropdown_new_version.value        
-        # if selected_value:
-        #     self.equipment_df_3 = self.equipment_df_2[self.equipment_df_2['equipment_version'] == selected_value]            
-        #     self.update_version_dropdown_new() 
+        if selected_value == "Другой...":
+            self.textfield_custom_version.visible = True
+            self.textfield_custom_version.value = None
+            self.page.update()
+        else:
+            self.textfield_custom_version.visible = False
+            self.textfield_custom_version.value = None
+            self.page.update()
         return selected_value    
 
 
@@ -752,6 +742,7 @@ class MainWindow:
     def save_equp(self,e):
         # Сохранение оборудования        
         save_button_service(self.equipment_df, self.equipment_IP_df,self.app_equp,self.app_type,self.app_version,self.start_zvn,self.end_zvn,self.app_start_ip,self.app_end_ip, self.flag)
+        self.update_file()
         self.app_close(e)          
     
 
@@ -771,11 +762,13 @@ class MainWindow:
 
     def calc(self, e):
         
-        self.version = self.dropdown_version.value
         self.equipment = self.dropdown_equp.value
+        self.type = self.dropdown_type.value
+        self.version = self.dropdown_version.value
         self.count_stick = int(self.textfield_count.value)
 
-        self.letter = save_button(self.df,self.equipment_IP_df, self.equipment, self.version, self.count_stick)
+        self.letter = save_button(self.df,self.equipment_IP_df, self.equipment, self.type, self.version, self.count_stick)
+        self.update_file()
         # print(self.version,self.equipment,self.count_stick)
         # print(calculating_button())
         self.listview_info.controls.append(
