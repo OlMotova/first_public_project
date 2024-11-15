@@ -474,14 +474,14 @@ class MainWindow:
         try:
             self.append_equipment(e)
 
-            self.index, self.start_zvn, self.end_zvn =calculating_button_service(self.equipment_IP_df, self.app_equp,self.app_type, self.app_start_ip, self.app_end_ip)
+            self.text, self.index, self.start_zvn, self.end_zvn =calculating_button_service(self.equipment_IP_df, self.app_equp,self.app_type, self.app_start_ip, self.app_end_ip)
             if self.index == True: 
-                self.dlg_app.content = ft.Text(f"Будет добавлено {self.app_equp} {self.app_version}\n{self.start_zvn} - {self.app_start_ip} --- {self.end_zvn} - {self.app_end_ip}")
+                self.dlg_app.content = ft.Text(f"Будет добавлено {self.app_equp} {self.app_type} {self.app_version}\n{self.start_zvn} - {self.app_start_ip} --- {self.end_zvn} - {self.app_end_ip}")
                 self.page.open(self.dlg_app)
                 # self.dlg_modal.open = True
                 self.page.update()
             else:
-                self.dlg_err.content = ft.Text(f"{self.app_start_ip} -  {self.app_end_ip}\n ты похоже перепутал")
+                self.dlg_err.content = ft.Text(f"{self.text}\n{self.app_start_ip} -  {self.app_end_ip}\n ты похоже перепутал")
                 # self.listview_info.controls.append(ft.Text("---какая то ошибка подсчета---"))
                 self.page.open(self.dlg_err)
                 self.page.update()
