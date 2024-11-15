@@ -77,12 +77,15 @@ def new_equipment_df_line_creating(equipment_name, equipment_type,  new_first_Zv
 def calculating_button_service (df_base_IP, equipment_name, equipment_type, first_ip, last_ip):
     #проверяем базу
     if check_IP_range_overlap_in_file(df_base_IP) == False:
+        print("Ошибка на моменте check_IP_range_overlap_in_file")
         return False, None, None
     if check_ip_serial_difference(df_base_IP) == False:
+        print("Ошибка на моменте check_ip_serial_difference")
         return False, None, None
 
     #проверяем пересечения диапазонов новых IP с данными в таблице
     if check_IP_range_overlap(df_base_IP, first_ip, last_ip) == False:
+        print("Ошибка на моменте check_IP_range_overlap(df_base_IP, first_ip, last_ip)")
         return False, None, None
 
     equipment_df_1 = df_filter(df_base_IP, 'equipment_name', equipment_name)
@@ -99,6 +102,7 @@ def calculating_button_service (df_base_IP, equipment_name, equipment_type, firs
     last_ZvN = first_ZvN + int(last_IP) - int(first_IP)
     #проверка IP на корректность порядка ввода
     if (int(last_IP) - int(first_IP)) < 1:
+        print("Ошибка на моменте (int(last_IP) - int(first_IP)) < 1")
         return False, None, None
 
     return True, first_ZvN, last_ZvN
