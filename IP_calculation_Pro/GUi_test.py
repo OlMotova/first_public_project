@@ -341,8 +341,8 @@ class MainWindow:
             title=ft.Text("ну и что заказывать будем?"),
             # content=ft.Text(f"--тут будет написан диапазон--"),
             actions=[
-                ft.TextButton("пойдет", on_click=self.calc),
-                ft.TextButton("нет я уже смешарик", on_click=self.handle_close),
+                ft.TextButton("Да, пойдет", on_click=self.calc),
+                ft.TextButton("Нет, я и так смешарик", on_click=self.handle_close),
             ],
             actions_alignment=ft.MainAxisAlignment.END,
             on_dismiss=lambda e: page.add(
@@ -742,7 +742,10 @@ class MainWindow:
     def save_equp(self,e):
         # Сохранение оборудования        
         save_button_service(self.equipment_df, self.equipment_IP_df,self.app_equp,self.app_type,self.app_version,self.start_zvn,self.end_zvn,self.app_start_ip,self.app_end_ip, self.flag)
-        self.update_file()
+         # Загружаем файлы через метод load_file
+        self.df = self.load_file('Main_file.xlsx')
+        self.equipment_df = self.load_file('equipment_database.xlsx')
+        self.equipment_IP_df = self.load_file('equipment_IP_database.xlsx')
         self.app_close(e)          
     
 
@@ -768,7 +771,7 @@ class MainWindow:
         self.count_stick = int(self.textfield_count.value)
 
         self.letter = save_button(self.df,self.equipment_IP_df, self.equipment, self.type, self.version, self.count_stick)
-        self.update_file()
+        # self.update_file()
         # print(self.version,self.equipment,self.count_stick)
         # print(calculating_button())
         self.listview_info.controls.append(
@@ -780,7 +783,13 @@ class MainWindow:
             )
         )
         self.handle_close(e)
+        self.listview_info.update()
+         # Загружаем файлы через метод load_file
+        self.df = self.load_file('Main_file.xlsx')
+        self.equipment_df = self.load_file('equipment_database.xlsx')
+        self.equipment_IP_df = self.load_file('equipment_IP_database.xlsx')
         self.page.update()
+        
        
 
     def run(self):
